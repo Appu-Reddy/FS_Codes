@@ -1,0 +1,176 @@
+/*
+Write a SQL query to find the average salary and number of employees per 
+department, ordered by average salary in descending order.
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
+
++--------+-------------+----------+                                                                                                                   
+| deptno | AVG(sal)    | COUNT(*) |                                                                                                                   
++--------+-------------+----------+                                                                                                                   
+|     40 | 3125.000000 |        2 |                                                                                                                   
+|     20 | 1970.833333 |        6 |                                                                                                                   
++--------+-------------+----------+ 
+
+*/
+use fs;
+
+SELECT deptno, AVG(sal), COUNT(*)
+FROM emp
+GROUP BY deptno
+ORDER BY AVG(sal) DESC;
+
+
+2.
+
+/*
+Write a SQL query to list the total salary and employee count per job, 
+excluding clerks.
+
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+OUTPUT:
++-----------+----------+----------+
+| job       | SUM(sal) | COUNT(*) |
++-----------+----------+----------+
+| SALESMAN  |  5600.00 |        4 |
+| MANAGER   |  8275.00 |        3 |
++-----------+----------+----------+
+
+*/
+use fs;
+
+SELECT job, SUM(sal), COUNT(*)
+FROM emp
+WHERE job!="CLERK"
+GROUP BY job;
+
+3.
+
+/*
+Write a SQL query to show the total salary per department where the total salary 
+exceeds 5000, ordered by department number.
+
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++--------+----------+
+| deptno | SUM(sal) |
++--------+----------+
+|     10 |  5350.00 |
+|     20 | 11825.00 |
++--------+----------+
+
+*/
+use fs;
+
+SELECT deptno, SUM(sal) FROM emp
+GROUP BY deptno
+HAVING SUM(sal) > 5000
+ORDER BY deptno;
+
+4.
+
+/*
+Write a SQL query to list all departments and their employee counts, including 
+departments with no employees, using RIGHT JOIN.
+
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+OUTPUT:
++--------+------------+-----------+
+| deptno | dname      | emp_count |
++--------+------------+-----------+
+|     10 | Accounting |         3 |
+|     20 | Research   |         6 |
+|     50 | Finance    |         0 |
++--------+------------+-----------+
+
+*/
+use fs;
+
+SELECT d.deptno, d.dname, COUNT(e.empno) AS emp_count
+FROM emp e
+RIGHT JOIN dept d
+ON e.deptno=d.deptno
+GROUP BY d.deptno,d.dname;
+
+5.
+
+/*
+Write a SQL query to list employee names and department names where 
+the department is in 'Chicago' using INNER JOIN.
+
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+OUTPUT:
++-------+-------+
+| ename | dname |
++-------+-------+
+| ALLEN | Sales |
+| BLAKE | Sales |
++-------+-------+
+
+
+
+*/
+
+use fs;
+
+SELECT e.ename, d.dname
+FROM emp e
+INNER JOIN dept d
+ON e.deptno=d.deptno
+WHERE d.location="Chicago";

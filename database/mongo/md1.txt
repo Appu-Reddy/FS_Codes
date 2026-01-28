@@ -1,0 +1,384 @@
+/*
+Find all deliveries where state = "DELIVERED", carrier = "dhl" and cost > 500, 
+Return only: customerId, cost, state. (Hide _id)
+
+
+Collection Name: deliveries
+
+Sample Document:
+----------------
+{
+  "_id": "697058b9af49dc18717ef292",
+  "customerId": "CUST-1001",
+  "state": "DELIVERED",
+  "carrier": "dhl",
+  "cost": 650,
+  "packages": [
+    {
+      "sku": "A1",
+      "weightKg": 2.5,
+      "fragile": true
+    },
+    {
+      "sku": "B2",
+      "weightKg": 1.2,
+      "fragile": false
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-18T10:00:00.000Z"
+  }
+}
+
+Sample Output:
+--------------
+[                                                                                                                                                     
+  {                                                                                                                                                   
+    customerId: 'CUST-1001',                                                                                                                          
+    state: 'DELIVERED',                                                                                                                               
+    cost: 650                                                                                                                                         
+  },                                                                                                                                                  
+  {                                                                                                                                                   
+    customerId: 'CUST-1002',                                                                                                                          
+    state: 'DELIVERED',                                                                                                                               
+    cost: 820                                                                                                                                         
+  }
+] 
+
+
+Query Reference:
+-------------------
+printjson() : JS library function to display the JSON Object data.
+    In db.<collection>.find()/aggregate():
+    	->  db -> Refers to the database.
+    	->  <collection> -> Your collection name
+	
+*/
+
+printjson(
+    db.deliveries.find({state:"DELIVERED",carrier:"dhl",cost: {$gt: 500}},{customerId: 1,cost: 1, state: 1, _id:0})
+)
+
+
+// 2
+
+/*
+Find deliveries where either carrier is in ["fedex", "dhl"] OR state is in 
+["RETURNED", "CANCELLED"], Return only: customerId, carrier, state, cost
+(Hide _id)
+
+
+Collection Name: deliveries
+
+Sample Document:
+----------------
+{
+  "_id": "697058b9af49dc18717ef292",
+  "customerId": "CUST-1001",
+  "state": "DELIVERED",
+  "carrier": "dhl",
+  "cost": 650,
+  "packages": [
+    {
+      "sku": "A1",
+      "weightKg": 2.5,
+      "fragile": true
+    },
+    {
+      "sku": "B2",
+      "weightKg": 1.2,
+      "fragile": false
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-18T10:00:00.000Z"
+  }
+}
+
+Sample Output:
+--------------
+[                                                                                                                                                     
+  {                                                                                                                                                   
+    customerId: 'CUST-1001',                                                                                                                          
+    state: 'DELIVERED',                                                                                                                               
+    carrier: 'dhl',                                                                                                                                   
+    cost: 650                                                                                                                                         
+  },                                                                                                                                                  
+  {                                                                                                                                                   
+    customerId: 'CUST-1002',                                                                                                                          
+    state: 'DELIVERED',                                                                                                                               
+    carrier: 'dhl',                                                                                                                                   
+    cost: 820                                                                                                                                         
+  },                                                                                                                                                  
+  {                                                                                                                                                   
+    customerId: 'CUST-1003',                                                                                                                          
+    state: 'IN_TRANSIT',                                                                                                                              
+    carrier: 'fedex',                                                                                                                                 
+    cost: 450                                                                                                                                         
+  }                                                                                                                                                   
+] 
+
+
+Query Reference:
+-------------------
+printjson() : JS library function to display the JSON Object data.
+    In db.<collection>.find()/aggregate():
+    	->  db -> Refers to the database.
+    	->  <collection> -> Your collection name
+	
+*/
+
+printjson(
+    db.deliveries.find(
+        {$or: 
+            [
+                {carrier: {$in: ["fedex","dhl"]}},
+                {state: {$in: ["RETURNED", "CANCELLED"]}}
+            ]
+        },
+        {customerId: 1, cost: 1, state: 1, carrier: 1, _id:0})
+)
+
+
+// 3
+
+/*
+Find deliveries where any package has sku = "A1. 
+Return only: customerId, packages.sku (Hide _id)
+
+
+Collection Name: deliveries
+
+Sample Document:
+----------------
+{
+  "_id": "697058b9af49dc18717ef292",
+  "customerId": "CUST-1001",
+  "state": "DELIVERED",
+  "carrier": "dhl",
+  "cost": 650,
+  "packages": [
+    {
+      "sku": "A1",
+      "weightKg": 2.5,
+      "fragile": true
+    },
+    {
+      "sku": "B2",
+      "weightKg": 1.2,
+      "fragile": false
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-18T10:00:00.000Z"
+  }
+}
+
+Sample Output:
+--------------
+[                                                                                                                                                     
+  {                                                                                                                                                   
+    customerId: 'CUST-1001',                                                                                                                          
+    packages: [                                                                                                                                       
+      {                                                                                                                                               
+        sku: 'A1'                                                                                                                                     
+      },                                                                                                                                              
+      {                                                                                                                                               
+        sku: 'B2'                                                                                                                                     
+      }                                                                                                                                               
+    ]                                                                                                                                                 
+  },                                                                                                                                                  
+  {                                                                                                                                                   
+    customerId: 'CUST-1003',                                                                                                                          
+    packages: [                                                                                                                                       
+      {                                                                                                                                               
+        sku: 'A1'                                                                                                                                     
+      }                                                                                                                                               
+    ]                                                                                                                                                 
+  }                                                                                                                                                  
+] 
+
+
+Query Reference:
+-------------------
+printjson() : JS library function to display the JSON Object data.
+    In db.<collection>.find()/aggregate():
+    	->  db -> Refers to the database.
+    	->  <collection> -> Your collection name
+	
+*/
+
+printjson(
+    db.deliveries.find({"packages.sku": 'A1'},{"packages.sku": 1, customerId: 1, _id: 0})
+)
+
+
+// 4
+
+/*
+Find deliveries where there exists a package sku = "A1", weightKg >= 2. Both 
+conditions must apply to the same package.
+
+Return only: customerId, packages.sku, packages.weightKg (Hide _id)
+
+
+Collection Name: deliveries
+
+Sample Document:
+----------------
+{
+  "_id": "697058b9af49dc18717ef292",
+  "customerId": "CUST-1001",
+  "state": "DELIVERED",
+  "carrier": "dhl",
+  "cost": 650,
+  "packages": [
+    {
+      "sku": "A1",
+      "weightKg": 2.5,
+      "fragile": true
+    },
+    {
+      "sku": "B2",
+      "weightKg": 1.2,
+      "fragile": false
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-18T10:00:00.000Z"
+  }
+}
+
+Sample Output:
+--------------
+[                                                                                                                                                     
+  {                                                                                                                                                   
+    customerId: 'CUST-1001',                                                                                                                          
+    packages: [                                                                                                                                       
+      {                                                                                                                                               
+        sku: 'A1',                                                                                                                                    
+        weightKg: 2.5                                                                                                                                 
+      },                                                                                                                                              
+      {                                                                                                                                               
+        sku: 'B2',                                                                                                                                    
+        weightKg: 1.2                                                                                                                                 
+      }                                                                                                                                               
+    ]                                                                                                                                                 
+  },                                                                                                                                                  
+  {                                                                                                                                                   
+    customerId: 'CUST-1006',                                                                                                                          
+    packages: [                                                                                                                                       
+      {                                                                                                                                               
+        sku: 'A1',                                                                                                                                    
+        weightKg: 2.2                                                                                                                                 
+      },                                                                                                                                              
+      {                                                                                                                                               
+        sku: 'F6',                                                                                                                                    
+        weightKg: 1.1                                                                                                                                 
+      }                                                                                                                                               
+    ]                                                                                                                                                 
+  }                                                                                                                                                   
+] 
+
+
+Query Reference:
+-------------------
+printjson() : JS library function to display the JSON Object data.
+    In db.<collection>.find()/aggregate():
+    	->  db -> Refers to the database.
+    	->  <collection> -> Your collection name
+	
+*/
+
+printjson(
+    db.deliveries.find({
+        packages: {
+            $elemMatch: { sku:'A1',weightKg: {$gte: 2} }
+        }
+    },
+    {customerId:1, "packages.sku":1, "packages.weightKg":1, _id:0}
+    )
+)
+
+
+// 5
+
+/*
+Find deliveries where number of packages > 3 return the latest 5 deliveries 
+(newest first). Return only: customerId, packages (Hide _id)
+
+
+Collection Name: deliveries
+
+Sample Document:
+----------------
+{
+  "_id": "697058b9af49dc18717ef292",
+  "customerId": "CUST-1001",
+  "state": "DELIVERED",
+  "carrier": "dhl",
+  "cost": 650,
+  "packages": [
+    {
+      "sku": "A1",
+      "weightKg": 2.5,
+      "fragile": true
+    },
+    {
+      "sku": "B2",
+      "weightKg": 1.2,
+      "fragile": false
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-01-18T10:00:00.000Z"
+  }
+}
+
+Sample Output:
+--------------
+[                                                                                                                                                     
+  {                                                                                                                                                   
+    customerId: 'CUST-1012',                                                                                                                          
+    packages: [                                                                                                                                       
+      {                                                                                                                                               
+        sku: 'Q17',                                                                                                                                   
+        weightKg: 1.2,                                                                                                                                
+        fragile: false                                                                                                                                
+      },                                                                                                                                              
+      {                                                                                                                                               
+        sku: 'R18',                                                                                                                                   
+        weightKg: 1.6,                                                                                                                                
+        fragile: false                                                                                                                                
+      },                                                                                                                                              
+      {                                                                                                                                               
+        sku: 'S19',                                                                                                                                   
+        weightKg: 0.8,                                                                                                                                
+        fragile: false                                                                                                                                
+      },                                                                                                                                              
+      {                                                                                                                                               
+        sku: 'T20',                                                                                                                                   
+        weightKg: 2.2,                                                                                                                                
+        fragile: true                                                                                                                                 
+      }                                                                                                                                               
+    ]                                                                                                                                                 
+  }                                                                                                                                                  
+]   
+
+
+Query Reference:
+-------------------
+printjson() : JS library function to display the JSON Object data.
+    In db.<collection>.find()/aggregate():
+    	->  db -> Refers to the database.
+    	->  <collection> -> Your collection name
+	
+*/
+
+printjson(
+    db.deliveries.find({
+       $expr: {
+           $gt: [{$size: "$packages"},3]
+       }
+    },{customerId: 1, packages: 1, _id: 0}).sort({createdAt: -1}).limit(5)
+)
