@@ -1,0 +1,33 @@
+Given the in-order and post-order traversals of a binary tree, construct 
+the original binary tree. 
+
+The output should list the nodes in the order they appear in pre-order.
+
+Input Format:
+-------------
+An integer N representing the number nodes.
+A space-separated list of N integers, the nodes in in-order traversal.
+A space-separated list of N integers, the nodes in post-order traversal.
+
+Output Format:
+--------------
+Print the list of the nodes in pre-order.
+
+
+Sample Input:
+-------------
+7
+4 2 5 1 6 3 7
+4 5 2 6 7 3 1
+
+Sample Output:
+--------------
+[1, 2, 4, 5, 3, 6, 7]
+
+Explanation:
+        1
+       / \
+      2   3
+     / \  / \
+    4   5 6  7
+    
