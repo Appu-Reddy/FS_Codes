@@ -1,0 +1,11 @@
+Idempotancy
+E-Tag
+Pagination
+Logging
+Bulkhead Design Pattern
+Circuit Breaker
+Redis
+Celery
+
+
+Decision Trees
