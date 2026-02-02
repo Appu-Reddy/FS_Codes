@@ -1,0 +1,118 @@
+Given the preorder and postorder traversals of a binary tree, construct 
+the original binary tree and print its level order traversal.
+
+Input Format:
+---------------
+Space separated integers, pre order data
+Space separated integers, post order data
+
+Output Format:
+-----------------
+Print the level-order data of the tree.
+
+
+Sample Input:
+----------------
+1 2 4 5 3 6 7
+4 5 2 6 7 3 1
+
+Sample Output:
+----------------
+[[1], [2, 3], [4, 5, 6, 7]]
+
+Explanation:
+--------------
+        1
+       / \
+      2   3
+     / \  / \
+    4   5 6  7
+
+
+Sample Input:
+----------------
+1 2 3
+2 3 1
+
+Sample Output:
+----------------
+[[1], [2, 3]]
+
+Explanation:
+--------------
+    1
+   / \
+  2  3
+
+
+/*
+
+import java.util.*;
+
+class Node{
+    int val;
+    Node left;
+    Node right;
+    Node(int val){
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+
+class Solution{
+    private static int[] preorder;
+    private static int[] postorder;
+    private static Map<Integer,Integer> mp;
+    private static int preidx;
+    
+    static Node build(int l, int r){
+        if (l>r || preidx>=preorder.length) return null;
+        Node cur = new Node(preorder[preidx++]);
+        if (l==r) return cur;
+        int idx = mp.get(preorder[preidx]);
+        cur.left = build(l,idx);
+        cur.right = build(idx+1,r-1);
+        return cur;
+    }
+    
+    static void levelOrder(Node root, List<List<Integer>> res){
+        Queue<Node> qu = new LinkedList<>();
+        qu.offer(root);
+        while (!qu.isEmpty()){
+            int size = qu.size();
+            List<Integer> lst = new ArrayList<>();
+            while (size-->0){
+                Node cur = qu.poll();
+                lst.add(cur.val);
+                if (cur.left!=null) qu.offer(cur.left);
+                if (cur.right!=null) qu.offer(cur.right);
+            }
+            res.add(lst);
+        }
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String[] pre = sc.nextLine().split(" ");
+        String[] post = sc.nextLine().split(" ");
+        int n = pre.length;
+        preorder = new int[n];
+        postorder = new int[n];
+        for (int i=0; i<n; i++){
+            preorder[i] = Integer.parseInt(pre[i]);
+            postorder[i] = Integer.parseInt(post[i]);
+        }
+        mp = new HashMap<>();
+        for (int i=0; i<n; i++) mp.put(postorder[i],i);
+        preidx = 0;
+        Node root = build(0,n-1);
+        List<List<Integer>> res = new ArrayList<>();
+        levelOrder(root,res);
+        System.out.println(res);
+        return;
+    }
+}
+
+*/
