@@ -1,0 +1,123 @@
+Design and implement a concurrent evaluation system in Java using the Callable 
+interface, such that:
+    - Each student’s evaluation runs in parallel
+    - Each evaluation computes the total score from 5 exam sections
+    - A student evaluation fails only for that student if invalid marks are detected
+    - Other students’ evaluations continue unaffected
+    
+    
+Input Format:
+-------------
+N → Number of students
+N lines → Each line contains 5 space-separated integers (section marks)
+
+Output Format:
+--------------
+For each student:
+    - Print total score if evaluation succeeds
+    - Print failure message if evaluation fails
+
+
+Sample Input:
+-------------
+3
+80 75 90 85 70
+60 -10 70 80 90
+88 92 77 85 90
+
+Sample Output:
+--------------
+Student-1 Total = 400
+Evaluation failed for Student-2: Invalid marks detected
+Student-3 Total = 432
+
+
+/*
+
+import java.util.*;
+import java.util.concurrent.*;
+
+class EvaluationTask implements Callable<Integer> {
+
+    private final int[] marks;
+    private final String studentName;
+
+    public EvaluationTask(String studentName, int[] marks) {
+        // IMPLEMENT YOUR CODE
+        this.marks = marks;
+        this.studentName = studentName;
+    }
+
+    @Override
+    public Integer call() throws Exception {
+        // IMPLEMENT YOUR CODE
+        int tot = 0;
+        for (int i: marks){
+            if (i<0 || i>100) throw new Exception("Invalid marks detected");
+            else tot += i;
+        }
+        return tot;
+    }
+
+    public String getStudentName() {
+        // IMPLEMENT YOUR CODE
+        return this.studentName;
+    }
+}
+
+public class ConcurrentStudentEvaluation {
+
+    private static final Object PRINT_LOCK = new Object();
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+
+        ExecutorService executor = Executors.newFixedThreadPool(
+                Math.min(N, Runtime.getRuntime().availableProcessors())
+        );
+
+        List<EvaluationTask> tasks = new ArrayList<>();
+        List<Future<Integer>> futures = new ArrayList<>();
+
+        // Read input and create tasks
+        for (int i = 1; i <= N; i++) {
+            int[] marks = new int[5];
+            for (int j = 0; j < 5; j++) {
+                marks[j] = sc.nextInt();
+            }
+            tasks.add(new EvaluationTask("Student-" + i, marks));
+        }
+
+        // Submit tasks
+        for (EvaluationTask task : tasks) {
+            futures.add(executor.submit(task));
+        }
+
+        // Retrieve results independently
+        for (int i = 0; i < futures.size(); i++) {
+
+            try {
+                int result = futures.get(i).get();
+                synchronized (PRINT_LOCK) {
+                    System.out.println( tasks.get(i).getStudentName() + " Total = " + result );
+                }
+
+            } catch (ExecutionException e) {
+                synchronized (PRINT_LOCK) {
+                    System.out.println( "Evaluation failed for "
+                        + tasks.get(i).getStudentName() + ": " + e.getCause().getMessage() );
+                }
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        executor.shutdown();
+        sc.close();
+    }
+}
+
+*/
