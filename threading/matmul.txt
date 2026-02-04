@@ -1,0 +1,128 @@
+You are given two matrices A and B.
+Your task is to compute the matrix multiplication result C = A × B.
+
+The implementation must strictly follow this rule:
+    - Each thread must be responsible for computing exactly one cell 
+      of the result matrix.
+
+This means that:
+    One thread computes one value C[i][j]
+    No thread may compute more than one cll
+    No cell may be computed by more than one thread
+
+🧠 Matrix Multiplication Definition
+-----------------------------------
+Matrix A is of size R × K
+Matrix B is of size K × C
+Then the result matrix C is of size R × C, where:
+    C[i][j] = A[i][0]×B[0][j] + A[i][1]×B[1][j] + ... + A[i][K−1]×B[K−1][j]
+
+Multithreading Requirement
+--------------------------
+    - The total number of threads created must be equal to the number of cells in 
+    the result matrix
+    - Threads must run concurrently
+    - Each thread must write its computed value directly to the shared result matrix
+    - The final output must be correct and deterministic
+
+Input Format
+------------
+R K
+Matrix A (R rows and K columns)
+K C
+Matrix B (K rows and C columns)
+
+Output Format
+-------------
+Result matrix C (R rows and C columns)
+Each row printed on a new line with space-separated integers
+
+
+Sample Input
+------------
+2 3
+1 2 3
+4 5 6
+3 2
+7 8
+9 10
+11 12
+
+Sample Output
+-------------
+58 64
+139 154
+
+/*
+
+import java.util.*;
+import java.util.concurrent.*;
+
+class Multiply implements Callable<Integer>{
+    private final int[][] mat1, mat2;
+    private final int r,c;
+    
+    Multiply(int[][] mat1, int[][] mat2, int r, int c){
+        this.mat1 = mat1;
+        this.mat2 = mat2;
+        this.r = r;
+        this.c = c;
+    }
+    
+    @Override
+    public Integer call() throws Exception{
+        int n1 = mat1[0].length;
+        int tot = 0;
+        for (int k=0; k<n1; k++){
+            tot += mat1[r][k] * mat2[k][c];
+        }
+        return tot;
+    }
+}
+
+class Solution{
+    public static void main(String[] args) throws Exception{
+        Scanner sc = new Scanner(System.in);
+        int m1 = sc.nextInt();
+        int n1 = sc.nextInt();
+        int[][] mat1 = new int[m1][n1];
+        for (int i=0; i<m1; i++){
+            for (int j=0; j<n1; j++){
+                mat1[i][j] = sc.nextInt();
+            }
+        }
+        
+        int m2 = sc.nextInt();
+        int n2 = sc.nextInt();
+        int[][] mat2 = new int[m2][n2];
+        for (int i=0; i<m2; i++){
+            for (int j=0; j<n2; j++){
+                mat2[i][j] = sc.nextInt();
+            }
+        }
+        
+        ExecutorService exec = Executors.newFixedThreadPool(
+                Math.min(m1*n2,Runtime.getRuntime().availableProcessors())
+        );
+        
+        List<Future<Integer>> futures = new ArrayList<>();
+        for (int i=0; i<m1; i++){
+            for (int j=0; j<n2; j++){
+                futures.add(exec.submit(new Multiply(mat1,mat2,i,j)));
+            }
+        }
+
+        int idx = 0;
+        for (int i=0; i<m1; i++){
+            for (int j=0; j<n2; j++){
+                System.out.print(futures.get(idx++).get() + " ");
+            }
+            System.out.println();
+        }
+        
+        exec.shutdown();
+        return;
+    }
+}
+
+*/
