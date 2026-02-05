@@ -1,0 +1,141 @@
+Bubloo is working with computer networks, where servers are connected 
+in a hierarchical structure, represented as a Binary Tree. Each server (node) 
+is uniquely identified by an integer value.
+
+Bubloo has been assigned an important task: find the shortest communication 
+path (in terms of network hops) between two specific servers in the network.
+
+Network Structure:
+------------------
+The network of servers follows a binary tree topology.
+Each server (node) has a unique identifier (integer).
+If a server does not exist at a certain position, it is represented as '-1' (NULL).
+
+Given the root of the network tree, and two specific server IDs (E1 & E2), 
+determine the minimum number of network hops (edges) required to 
+communicate between these two servers.
+
+Input Format:
+-------------
+Space separated integers, elements of the tree.
+
+Output Format:
+--------------
+Print an integer value.
+
+
+Sample Input-1:
+---------------
+1 2 4 3 5 6 7 8 9 10 11 12
+4 8
+
+Sample Output-1:
+----------------
+4
+
+Explanation:
+------------
+The edegs between 4 and 8 are: [4,1], [1,2], [2,3], [3,8]
+
+
+Sample Input-2:
+---------------
+1 2 4 3 5 6 7 8 9 10 11 12
+6 6
+
+Sample Output-2:
+----------------
+0
+
+Explanation:
+------------
+No edegs between 6 and 6.
+
+
+/*
+
+import java.util.*;
+
+class Node{
+    int val;
+    Node left, right;
+    Node(int val){
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+class Solution{
+    private static int[] levorder;
+    
+    private static Node build(){
+        Node root = new Node(levorder[0]);
+        int n = levorder.length;
+        if (n==1) return root;
+        
+        Queue<Node> qu = new LinkedList<>();
+        qu.add(root);
+        int idx = 1;
+        while (!qu.isEmpty() && idx<n){
+            Node cur = qu.poll();
+            if (idx<n && levorder[idx]!=-1){
+                cur.left = new Node(levorder[idx]);
+                qu.offer(cur.left);
+            }
+            idx++;
+            if (idx<n && levorder[idx]!=-1){
+                cur.right = new Node(levorder[idx]);
+                qu.offer(cur.right);
+            }
+            idx++;
+        }
+        
+        return root;
+    }
+    
+    private static Node findlca(Node n, int n1, int n2){
+        if (n==null) return null;
+        if (n.val==n1 || n.val==n2) return n;
+        
+        Node l = findlca(n.left,n1,n2);
+        Node r = findlca(n.right,n1,n2);
+        
+        if (l!=null && r!=null) return n;
+        if (l!=null) return l;
+        else return r;
+    }
+    
+    private static int distance_from_lca(Node r, int tar){
+        if (r==null) return -1;
+        if (r.val==tar) return 0;
+        
+        int left = distance_from_lca(r.left,tar);
+        if (left!=-1) return left+1;
+        
+        int right = distance_from_lca(r.right,tar);
+        if (right!=-1) return right+1;
+        return -1;
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String[] lev = sc.nextLine().split(" ");
+        int n = lev.length;
+        levorder = new int[n];
+        for (int i=0; i<n; i++) levorder[i] = Integer.parseInt(lev[i]);
+        
+        Node root = build();
+        int n1 = sc.nextInt();
+        int n2 = sc.nextInt();
+        Node lca = findlca(root,n1,n2);
+        
+        int d1 = distance_from_lca(lca,n1);
+        int d2 = distance_from_lca(lca,n2);
+        if (d1==-1 || d2==-1) System.out.println(0);
+        else System.out.println(d1+d2);
+        return;
+    }
+}
+
+*/
