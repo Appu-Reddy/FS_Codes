@@ -12,3 +12,5 @@ Metrics:
 Pearson, Spearman, MCC, Confusion Matrix,
 Precision, Accuracy, TPR, FPR, ROC-AUC, Confidence Interval
 Decision Trees
+Random Forest
+Gradient Boosting
