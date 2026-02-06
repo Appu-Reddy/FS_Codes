@@ -6,6 +6,7 @@ Bulkhead Design Pattern
 Circuit Breaker
 Redis
 Celery
+Multi-threading
 
 
 Metrics:

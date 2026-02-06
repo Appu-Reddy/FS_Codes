@@ -1,0 +1,185 @@
+You are developing a multi-threaded backend system for an e-commerce platform.
+
+The platform receives customer orders from multiple sources (mobile app, website, partner APIs).
+These orders must be queued, processed, and dispatched concurrently.
+
+To ensure scalability:
+	- Order creation and order processing run in parallel
+	- Orders are exchanged through a shared buffer with limited capacity
+
+Order Information: Each order contains the following details:
+
+--------------------------------------------------
+Field						Description
+--------------------------------------------------
+orderId					Unique order identifier
+customerName	Name of the customer
+productName		Product ordered
+quantity					Number of items
+pricePerUnit			Cost per item
+totalAmount			quantity × price
+--------------------------------------------------
+
+Input Format:
+-----------------
+BUFFER_CAPACITY
+NUMBER_OF_ORDERS, N
+Next N lines:
+orderId customerName productName quantity pricePerUnit
+
+
+Sample Input:
+-----------------
+3
+4
+1001 Alice Laptop 1 75000
+1002 Bob Phone 2 20000
+1003 Charlie Tablet 1 30000
+1004 Diana Headphones 2 5000
+
+Sample Output:
+-------------------
+PRODUCED Order[ID=1001, Customer=Alice, Product=Laptop, Qty=1, Total=75000.0]
+PRODUCED Order[ID=1002, Customer=Bob, Product=Phone, Qty=2, Total=40000.0]
+PRODUCED Order[ID=1003, Customer=Charlie, Product=Tablet, Qty=1, Total=30000.0]
+PRODUCED Order[ID=1004, Customer=Diana, Product=Headphones, Qty=2, Total=10000.0]
+CONSUMED Order[ID=1001, Total=75000.0]
+CONSUMED Order[ID=1002, Total=40000.0]
+CONSUMED Order[ID=1003, Total=30000.0]
+CONSUMED Order[ID=1004, Total=10000.0]
+
+
+/*
+
+import java.util.*;
+import java.util.concurrent.*;
+
+class Order{
+    int orderid;
+    String cust_name;
+    String pro_name;
+    int quan;
+    double price;
+    double tot;
+    
+    Order(int orderid, String cust_name, String pro_name, int quan, double price){
+        this.orderid = orderid;
+        this.cust_name = cust_name;
+        this.pro_name = pro_name;
+        this.quan = quan;
+        this.price = price;
+        this.tot = price*quan;
+    }
+}
+
+class OrderBuffer{
+    int cap;
+    List<Order> lst;
+    OrderBuffer(int cap){
+        this.cap = cap;
+        lst = new ArrayList<>();
+    }
+    
+    synchronized String produce(Order o) throws Exception{
+        this.lst.add(o);
+        return "PRODUCED Order[ID="+ o.orderid +", Customer="+ o.cust_name +
+                    ", Product="+ o.pro_name + ", Qty="+ o.quan +", Total="+ o.tot +"]";
+    }
+    
+    synchronized String consume() throws Exception{
+        Order o = lst.remove(0);
+        return "CONSUMED Order[ID="+ o.orderid +", Total="+ o.tot +"]";
+    }
+}
+
+class OrderProducer implements Callable<List<String>>{
+    private final OrderBuffer buff;
+    private final List<Order> buffer;
+    
+    OrderProducer(OrderBuffer buff, List<Order> buffer){
+        this.buff = buff;
+        this.buffer = buffer;
+    }
+    
+    @Override
+    public List<String> call() throws Exception{
+        List<String> logs = new ArrayList<>();
+        for (Order o: buffer){
+            logs.add(buff.produce(o));
+        }
+        return logs;
+    }
+}
+
+class OrderConsumer implements Callable<List<String>>{
+    private final OrderBuffer buff;
+    private final int n;
+    
+    OrderConsumer(OrderBuffer buff, int n){
+        this.buff = buff;
+        this.n = n;
+    }
+    
+    @Override
+    public List<String> call() throws Exception{
+        List<String> logs = new ArrayList<>();
+        for (int i=0; i<n; i++){
+            logs.add(buff.consume());
+        }
+        return logs;
+    }
+}
+
+public class ProducerConsumerCallableDemo {
+    /* ==========================
+       IMPLEMENT YOUR CODE HERE
+       ========================== */
+       
+    public static void main(String[] args) throws Exception {
+
+        Scanner sc = new Scanner(System.in);
+
+        int bufferCapacity = sc.nextInt();
+        int n = sc.nextInt();
+
+        List<Order> orders = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            orders.add(new Order(
+                    sc.nextInt(),
+                    sc.next(),
+                    sc.next(),
+                    sc.nextInt(),
+                    sc.nextDouble()
+            ));
+        }
+
+        OrderBuffer buffer = new OrderBuffer(bufferCapacity);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        long start = System.currentTimeMillis();
+
+        Future<List<String>> producerFuture =
+                executor.submit(new OrderProducer(buffer, orders));
+
+        Future<List<String>> consumerFuture =
+                executor.submit(new OrderConsumer(buffer, n));
+
+        /* ---- PHASE 1: PRINT PRODUCERS ---- */
+        for (String log : producerFuture.get()) {
+            System.out.println(log);
+        }
+
+        /* ---- PHASE 2: PRINT CONSUMERS ---- */
+        for (String log : consumerFuture.get()) {
+            System.out.println(log);
+        }
+
+        executor.shutdown();
+        sc.close();
+    }
+}
+
+// u can also use ArrayBlockedQueue<> (or) wait() and notify() methods 
+
+*/

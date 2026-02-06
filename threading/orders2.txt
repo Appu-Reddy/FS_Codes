@@ -1,0 +1,164 @@
+You are given N customer orders that must be processed sequentially.
+Design a Java multithreading application using the Callable interface only, 
+with the following strict constraints:
+    - There is exactly ONE Producer task
+    - There is exactly ONE Consumer task
+    - The number of orders (N) and the list of orders are global shared objects
+    - The Producer and Consumer must not receive the orders directly
+    - The Producer and Consumer must communicate only through a shared handoff object
+    - There is NO buffer, queue, or collection used for intermediate storage
+
+Each order must be processed in the following strict order:
+Producer processes one order → Consumer processes the same order → then move to the next order
+
+The Producer must wait until the Consumer finishes processing the current order.
+The Consumer must wait until the Producer produces the next order.
+
+Order Information: Each order contains the following details:
+
+----------------------------------------
+Field			Description
+----------------------------------------
+orderId			Unique order identifier
+customerName	Name of the customer
+productName		Product ordered
+quantity		Number of items
+pricePerUnit	Cost per item
+totalAmount		quantity × price
+----------------------------------------
+
+Input Format:
+-------------
+NUMBER_OF_ORDERS, N
+Next N lines: orderId customerName productName quantity pricePerUnit
+
+
+Sample Input:
+-------------
+3
+1001 Alice Laptop 1 75000
+1002 Bob Phone 2 20000
+1003 Charlie Tablet 1 30000
+
+Sample Output:
+--------------
+PRODUCED Order[ID=1001, Customer=Alice, Product=Laptop, Qty=1, Total=75000.0]
+CONSUMED Order[ID=1001, Total=75000.0]
+PRODUCED Order[ID=1002, Customer=Bob, Product=Phone, Qty=2, Total=40000.0]
+CONSUMED Order[ID=1002, Total=40000.0]
+PRODUCED Order[ID=1003, Customer=Charlie, Product=Tablet, Qty=1, Total=30000.0]
+CONSUMED Order[ID=1003, Total=30000.0]
+
+
+
+/*
+
+import java.util.*;
+import java.util.concurrent.*;
+
+class Order{
+    int orderid;
+    String cust_name;
+    String pro_name;
+    int quan;
+    double price;
+    double tot;
+    
+    Order(int orderid, String cust_name, String pro_name, int quan, double price){
+        this.orderid = orderid;
+        this.cust_name = cust_name;
+        this.pro_name = pro_name;
+        this.quan = quan;
+        this.price = price;
+        this.tot = price*quan;
+    }
+}
+
+class OrderProcess{
+    private Order cur_order = null;
+    private boolean avai = false;
+    
+    public synchronized void produce(Order o) throws Exception{
+        while (avai) wait();
+        cur_order = o;
+        avai = true;
+
+        System.out.println("PRODUCED Order[ID="+ o.orderid +", Customer="+ o.cust_name +
+                    ", Product="+ o.pro_name + ", Qty="+ o.quan +", Total="+ o.tot +"]");
+        notifyAll();
+    }
+    
+    public synchronized void consume() throws Exception{
+        while (!avai) wait();
+        Order o = cur_order;
+        avai = false;
+        
+        System.out.println("CONSUMED Order[ID="+ o.orderid +", Total="+ o.tot +"]");
+        notifyAll();
+    }
+}
+
+class Producer implements Callable<String>{
+    private final List<Order> orders;
+    private final OrderProcess op;
+    
+    Producer(List<Order> orders, OrderProcess op){
+        this.orders = orders;
+        this.op = op;
+    }
+    
+    public String call() throws Exception{
+        for (int i=0; i<orders.size(); i++){
+            op.produce(orders.get(i));
+        }
+        return "Produced all";
+    }
+}
+
+class Consumer implements Callable<String>{
+    private final List<Order> orders;
+    private final OrderProcess op;
+    
+    Consumer(List<Order> orders, OrderProcess op){
+        this.orders = orders;
+        this.op = op;
+    }
+    
+    public String call() throws Exception{
+        for (int i=0; i<orders.size(); i++){
+            op.consume();
+        }
+        return "Consumed all";
+    }
+}
+
+class Solution{
+    public static void main(String[] args) throws Exception{
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        
+        List<Order> orders = new ArrayList<>();
+
+        for (int i=0; i<n; i++){
+            orders.add(new Order(
+                    sc.nextInt(),
+                    sc.next(),
+                    sc.next(),
+                    sc.nextInt(),
+                    sc.nextDouble()
+            ));
+        }
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        OrderProcess op = new OrderProcess();
+        
+        Future<String> pro = executor.submit(new Producer(orders,op));
+        Future<String> cons = executor.submit(new Consumer(orders,op));
+        
+        pro.get();
+        cons.get();
+        
+        executor.shutdown();
+    }
+}
+
+*/
