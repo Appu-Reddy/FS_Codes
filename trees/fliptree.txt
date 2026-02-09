@@ -1,0 +1,137 @@
+VishnuVardan is working with Decision Trees for AI-based predictions.
+To analyze alternative outcomes, Kishore has planned to flip the decision 
+tree horizontally to simulate a reverse processing approach.
+
+Rules for Flipping the Decision Tree:
+	- The original root node becomes the new rightmost node.
+	- The original left child becomes the new root node.
+	- The original right child becomes the new left child.
+This transformation is applied level by level recursively.
+
+Note:
+------
+- Each node in the given tree has either 0 or 2 children.
+- Every right node in the tree has a left sibling sharing the same parent.
+- Every right node has no further children (i.e., they are leaf nodes).
+
+Your task is to help VishnuVardan flip the Decision Tree while following 
+the given transformation rules.
+
+Input Format:
+-------------
+Space separated integers, nodes of the tree.
+
+Output Format:
+--------------
+Print the list of nodes of flipped tree as described below.
+
+
+Sample Input-1:
+---------------
+4 2 3 5 1
+
+Sample Output-1:
+----------------
+5 1 2 3 4
+
+
+Sample Input-2:
+---------------
+4 2 5
+
+Sample Output-2:
+----------------
+2 5 4
+
+/*
+
+import java.util.*;
+
+class Node{
+    int val;
+    Node left,right;
+    Node (int val){
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+class Solution{
+    private static int[] levorder;
+    
+    private static Node build(){
+        int n = levorder.length;
+        if (n==0) return null;
+        Node root = new Node(levorder[0]);
+        if (n==1) return root;
+        
+        Queue<Node> qu = new LinkedList<>();
+        qu.offer(root);
+        int idx = 1;
+        while (!qu.isEmpty() && idx<n){
+            Node cur = qu.poll();
+            if (idx<n){
+                if (levorder[idx]==-1) cur.left = null;
+                else{
+                    cur.left = new Node(levorder[idx]);
+                    qu.offer(cur.left);
+                }
+            }
+            idx++;
+            if (idx<n){
+                if (levorder[idx]==-1) cur.right = null;
+                else{
+                    cur.right = new Node(levorder[idx]);
+                    qu.offer(cur.right);
+                }
+            }
+            idx++;
+        }
+        return root;
+    }
+    
+    private static Node flip(Node n){
+        if (n==null || n.left==null) return n;
+        
+        Node newnode = flip(n.left);
+        
+        n.left.left = n.right;
+        n.left.right = n;
+        
+        n.left = null;
+        n.right = null;
+        
+        return newnode;
+    }
+    
+    private static List<Integer> levelorder(Node n){
+        List<Integer> lst = new ArrayList<>();
+        if (n==null) return lst;
+        
+        Queue<Node> qu = new LinkedList<>();
+        qu.offer(n);
+        while (!qu.isEmpty()){
+            Node cur = qu.poll();
+            lst.add(cur.val);
+            if (cur.left!=null) qu.offer(cur.left);
+            if (cur.right!=null) qu.offer(cur.right);
+        }
+        return lst;
+    }
+    
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String[] lev = sc.nextLine().split(" ");
+        int n = lev.length;
+        levorder = new int[n];
+        for (int i=0; i<n; i++) levorder[i] = Integer.parseInt(lev[i]);
+        
+        Node root = build();
+        Node flip_root = flip(root);
+        System.out.println(levelorder(flip_root));
+    }
+}
+
+*/
