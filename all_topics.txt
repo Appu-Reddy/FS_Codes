@@ -8,6 +8,8 @@ Redis
 Celery
 Multi-threading
 Sessions
+CSRF Attacks
+OAuth2.0
 
 
 Metrics:
@@ -16,6 +18,3 @@ Precision, Accuracy, TPR, FPR, ROC-AUC, Confidence Interval
 Decision Trees
 Random Forest
 Gradient Boosting
-
-
-CSRF Attacks

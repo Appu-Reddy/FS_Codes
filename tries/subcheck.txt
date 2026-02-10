@@ -1,0 +1,114 @@
+Imagine you're playing a fantasy video game where secret level codes unlock new 
+worlds. These codes are strings made up of letters, and a level code is only 
+considered valid if every shorter code formed by its leading characters has been
+discovered along the journey. In other words, a code is unlockable only when 
+all of its prefixes are also present in your collection.
+
+Given a list of strings representing the level codes you’ve collected, find the 
+longest valid level code such that every prefix of that code is in the list. If 
+there is more than one valid code of the same length, choose the one that comes 
+first in alphabetical order. If no such code exists, return an empty string.
+
+Input Format
+-------------
+Line1: Space separated codes (strings)
+ 
+Output Format
+--------------
+string 
+
+
+Example 1:
+----------
+Input:
+m ma mag magi magic magici magicia magician magicw
+Output: 
+"magician"
+
+Explanation: The code "magician" is unlockable because every prefix—"m", "ma", 
+"mag", "magi", "magic", "magici", and "magicia"—is present in the list. Although 
+"magicw" appears too, it fails since its prefix "magica" is missing.
+
+
+Example 2:
+----------
+Input:
+a banana app appl ap apply apple
+Output: 
+"apple"  
+
+Explanation: Both "apple" and "apply" have every prefix in the list, but "apple" 
+is comes first in alphabetical order.
+
+Example 3:
+----------
+Input: 
+abc bc ab abcd
+Output: 
+""
+
+/*
+
+import java.util.*;
+
+class TrieNode{
+    boolean eow;
+    TrieNode[] children;
+    
+    TrieNode(){
+        children = new TrieNode[26];
+        for (int i=0; i<26; i++) children[i] = null;
+    }
+}
+
+class Trie{
+    TrieNode root;
+    
+    Trie(){
+        root = new TrieNode();
+    }
+    
+    void insert(String word){
+        TrieNode cur = root;
+        for (int i=0; i<word.length(); i++){
+            int idx = word.charAt(i) - 'a';
+            if (cur.children[idx]==null) cur.children[idx] = new TrieNode();
+            cur = cur.children[idx];
+        }
+        cur.eow = true;
+    }
+    
+    boolean search(String word){
+        TrieNode cur = root;
+        for (int i=0; i<word.length(); i++){
+            int idx = word.charAt(i) - 'a';
+            if (cur.children[idx]==null) return false;
+            cur = cur.children[idx];
+            if (cur.eow==false) return false;
+        }
+        return true;
+    }
+}
+
+class Solution{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String[] words = sc.nextLine().split(" ");
+        int n = words.length;
+        Trie t = new Trie();
+        for (String w: words) t.insert(w);
+        String ans = "";
+        for (int i=n-1; i>=0; i--){
+            if (t.search(words[i])){
+                if (ans.length() < words[i].length() 
+                        || (words[i].length()==ans.length() && words[i].compareTo(ans)<0)){
+                    ans = words[i];
+                }
+            }
+        }
+        if (ans.length()>0) System.out.println(ans);
+        return;
+    }
+}
+
+*/
