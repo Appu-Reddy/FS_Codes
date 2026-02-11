@@ -1,0 +1,204 @@
+Imagine you are a librarian organizing books on vertical shelves in a grand 
+library. The books are currently scattered across a tree-like structure, where 
+each book (node) has a position determined by its shelf number (column) and 
+row number (level).
+
+Your task is to arrange the books on shelves so that:
+1. Books are placed column by column from left to right.
+2. Within the same column, books are arranged from top to bottom (i.e., by row).
+3. If multiple books belong to the same shelf and row, they should be arranged 
+from left to right, just as they appear in the original scattered arrangement.
+
+Example 1:
+Input:
+3 9 20 -1 -1 15 7
+Output: 
+[[9],[3,15],[20],[7]]
+
+Explanation:
+         3
+       /   \
+      9     20
+          /    \
+         15     7
+
+Shelf 1: [9]
+Shelf 2: [3, 15]
+Shelf 3: [20]
+Shelf 4: [7]
+
+
+Example 2:
+Input:
+3 9 8 4 0 1 7
+Output: 
+[[4],[9],[3,0,1],[8],[7]]
+
+Explanation:
+          3
+       /     \
+      9       8
+    /   \   /   \
+   4     0 1     7
+
+Shelf 1: [4]
+Shelf 2: [9]
+Shelf 3: [3, 0, 1]
+Shelf 4: [8]
+Shelf 5: [7]
+
+Library Organization Rules:
+1. Each column represents a shelf from left to right.
+2. Books on the same shelf are arranged from top to bottom.
+3. If books share the same position, they are arranged left to right in order 
+of appearance.
+
+
+/*
+
+import java.util.*;
+
+class Node{
+    int val;
+    Node left,right;
+    Node (int val){
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+class Pair{
+    Node n;
+    int r;
+    Pair(Node n, int r){
+        this.n = n;
+        this.r = r;
+    }
+}
+
+class Solution{
+    
+    private static int[] levorder;
+    private static TreeMap<Integer,List<Integer>> mp;
+    
+    // private static Node build(){
+    //     int n = levorder.length;
+        
+    //     if (n==0) return null;
+    //     if (n==1 && levorder[0]==-1) return null;
+        
+    //     Node root = new Node(levorder[0]);
+    //     if (n==1) return root;
+        
+    //     Queue<Node> qu = new LinkedList<>();
+    //     qu.offer(root);
+    //     int idx = 1;
+    //     while (!qu.isEmpty() && idx<n){
+    //         Node cur = qu.poll();
+    //         if (idx<n){
+    //             if (levorder[idx]==-1) cur.left = null;
+    //             else{
+    //                 cur.left = new Node(levorder[idx]);
+    //                 qu.offer(cur.left);
+    //             }
+    //         }
+    //         idx++;
+    //         if (idx<n){
+    //             if (levorder[idx]==-1) cur.right = null;
+    //             else{
+    //                 cur.right = new Node(levorder[idx]);
+    //                 qu.offer(cur.right);
+    //             }
+    //         }
+    //         idx++;
+    //     }
+    //     return root;
+    // }
+    
+    private static Node build(){
+        int n = levorder.length;
+        
+        if (n==0) return null;
+        if (n==1 && levorder[0]==-1) return null;
+        
+        Node root = new Node(levorder[0]);
+        if (n==1) return root;
+        
+        mp = new TreeMap<>();
+        
+        Queue<Pair> qu = new LinkedList<>();
+        qu.offer(new Pair(root,0));
+        int idx = 1;
+        while (!qu.isEmpty()){
+            Pair p = qu.poll();
+            Node cur = p.n;
+            int curr = p.r;
+            mp.computeIfAbsent(curr,k->new ArrayList<>()).add(cur.val);
+            
+            if (idx<n){
+                if (levorder[idx]==-1) cur.left = null;
+                else{
+                    cur.left = new Node(levorder[idx]);
+                    qu.offer(new Pair(cur.left,curr-1));
+                }
+            }
+            idx++;
+            
+            if (idx<n){
+                if (levorder[idx]==-1) cur.right = null;
+                else{
+                    cur.right = new Node(levorder[idx]);
+                    qu.offer(new Pair(cur.right,curr+1));
+                }
+            }
+            idx++;
+        }
+        
+        List<List<Integer>> lst = new ArrayList<>();
+        for (List<Integer> l: mp.values()) lst.add(l);
+        if (lst.size()>0) System.out.println(lst);
+        
+        return root;
+    }
+    
+    // private static void helper(Node root, int r){
+    //     if (root==null) return;
+    //     mp.computeIfAbsent(r,k->new ArrayList<>()).add(root.val);
+    //     helper(root.left,r-1);
+    //     helper(root.right,r+1);
+    // }
+    
+    // private static void vertical_view(Node root){
+    //     mp = new TreeMap<>();
+    //     helper(root,0);
+    //     List<List<Integer>> lst = new ArrayList<>();
+    //     for (Map.Entry<Integer,List<Integer>> e: mp.entrySet()){
+    //         if (e.getValue().size()>0) lst.add(e.getValue());
+    //         }
+    //     }
+    //     if (lst.size()>0) System.out.println(lst);
+    //     return;
+    // }
+    
+    //      1
+    //    2   3
+    //  4   6
+    //    5
+    //      7
+    
+    // the above fails as it adds 7 first than 6 so wrong
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String[] lev = sc.nextLine().split(" ");
+        int n = lev.length;
+        levorder = new int[n];
+        for (int i=0; i<n; i++) levorder[i] = Integer.parseInt(lev[i]);
+        
+        Node root = build();
+        // vertical_view(root);
+    }
+}
+
+*/
