@@ -11,6 +11,9 @@ Sessions
 CSRF Attacks
 OAuth2.0
 SQL Injection
+DoS Attacks
+Rate Limiting
+Brute-force logging failure locking
 
 
 Metrics:

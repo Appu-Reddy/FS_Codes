@@ -1,0 +1,194 @@
+A smart factory has a central alarm system that coordinates three independent 
+subsystems:
+    - Thread A – Alarm Controller -> Activates a warning beep (prints 0).
+    - Thread B – Even Sensor Unit -> Reports only even-numbered machine IDs.
+    - Thread C – Odd Sensor Unit -> Reports only odd-numbered machine IDs.
+
+The system must produce an alternating sequence:
+0 1 0 2 0 3 0 4 0 5 ...
+
+
+The total length of the sequence must be 2n, where: n is the total number of 
+machine IDs (from 1 to n). Each machine report must always be preceded by a 
+warning beep (0).
+
+Implement a class FactoryAlarmSystem that ensures proper synchronization between 
+three threads so that: The alarm thread always prints 0, Then either the odd or 
+even thread prints the next correct number. Continue this pattern until all 
+numbers from 1 to n are printed
+
+only
+
+🧾 Input Format
+---------------
+A single integer: N
+
+🖨 Output Format
+----------------
+A continuous string representing the alarm and machine sequence.
+
+Sample Input-1:
+---------------
+2
+
+Sample Output-1:
+----------------
+0102
+
+Sample Input-2:
+---------------
+5
+
+Sample Output-2:
+----------------
+0102030405
+
+/*
+
+import java.util.*;
+import java.io.*;
+
+class Shared{
+    int n;
+    int i;
+    int flag;
+    
+    Shared(int n){
+        this.n = n;
+        this.i = 1;
+        this.flag = 0;
+    }
+    
+    public synchronized int get(){
+        return this.i;
+    }
+    
+    public int getLast(){
+        return this.n;
+    }
+    
+    public int getflag(){
+        return this.flag;
+    }
+    
+    public synchronized void setFlag(){
+        if (this.i%2==0) flag = 1;
+        else flag = 2;
+        notifyAll();
+    }
+    
+    public synchronized void increment(){
+        this.i++;
+        notifyAll();
+    }
+    
+    public synchronized void resetFlag(){
+        this.flag = 0;
+        notifyAll();
+    }
+}
+
+class MyThread0 implements Runnable{
+    Shared sh;
+    
+    MyThread0(Shared sh){
+        this.sh = sh;
+    }
+    
+    public void run(){
+        while (true){
+            synchronized(sh){
+                while (sh.getflag()!=0 && sh.get()<=sh.getLast()){
+                    try{
+                        sh.wait();
+                    }
+                    catch (InterruptedException e){
+                        throw new RuntimeException(e);
+                    }
+                }
+                if (sh.get()>sh.getLast()){
+                    sh.notifyAll();
+                    break;
+                }
+                System.out.print("0");
+                sh.setFlag();
+            }
+        }
+    }
+}
+
+class MyThreadEven implements Runnable{
+    Shared sh;
+    
+    MyThreadEven(Shared sh){
+        this.sh = sh;
+    }
+    
+    public void run(){
+        while (true){
+            synchronized (sh){
+                while (sh.getflag()!=1 && sh.get()<=sh.getLast()){
+                    try{
+                        sh.wait();
+                    }
+                    catch (InterruptedException e){
+                        throw new RuntimeException(e);
+                    }
+                }
+                if (sh.get()>sh.getLast()){
+                    sh.notifyAll();
+                    break;
+                }
+                System.out.print(sh.get());
+                sh.increment();
+                sh.resetFlag();
+            }
+        }
+    }
+}
+
+class MyThreadOdd implements Runnable{
+    Shared sh;
+    
+    MyThreadOdd(Shared sh){
+        this.sh = sh;
+    }
+    
+    public void run(){
+        while (true){
+            synchronized (sh){
+                while (sh.getflag()!=2 && sh.get()<=sh.getLast()){
+                    try{
+                        sh.wait();
+                    }
+                    catch (InterruptedException e){
+                        throw new RuntimeException(e);
+                    }
+                }
+                if (sh.get()>sh.getLast()){
+                    sh.notifyAll();
+                    break;
+                }
+                System.out.print(sh.get());
+                sh.increment();
+                sh.resetFlag();
+            }
+        }
+    }
+}
+
+class Solution{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        Shared sh = new Shared(n);
+        Thread t1 = new Thread(new MyThread0(sh));
+        Thread t2 = new Thread(new MyThreadEven(sh));
+        Thread t3 = new Thread(new MyThreadOdd(sh));
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
+
+*/

@@ -1,0 +1,192 @@
+// 1
+
+/*
+Write an SQL query to display all details of employees whose salary is greater 
+than the salary of the employee named BLAKE.
+
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++-------+-------+-----------+------+------------+---------+------+--------+
+| empno | ename | job       | mgr  | hiredate   | sal     | comm | deptno |
++-------+-------+-----------+------+------------+---------+------+--------+
+|  7566 | JONES | MANAGER   | 7839 | 1995-10-31 | 2975.00 | NULL |     20 |
+|  7788 | SCOTT | ANALYST   | 7566 | 1996-03-05 | 3000.00 | NULL |     20 |
++-------+-------+-----------+------+------------+---------+------+--------+
+
+
+*/
+use fs;
+
+SELECT * FROM emp
+WHERE sal > (
+    SELECT sal FROM emp WHERE ename="BLAKE"
+);
+
+
+// 2
+
+/*
+Write an SQL query to list all employees who have the same job designation as 
+the employee named ALLEN.
+
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++-------+--------+----------+------+------------+---------+---------+--------+
+| empno | ename  | job      | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1998-08-15 | 1600.00 |  300.00 |     10 |
+|  7844 | KEVIN  | SALESMAN | 7698 | 1995-06-04 | 1500.00 |    0.00 |     30 |
++-------+--------+----------+------+------------+---------+---------+--------+
+
+
+*/
+
+use fs;
+
+SELECT * from emp
+WHERE job IN (
+    SELECT job FROM emp WHERE ename="ALLEN"
+);
+
+
+// 3
+
+/*
+Write an SQL query to find the employee(s) who earn the second highest salary 
+in the company.
+
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++-------+-------+---------+------+------------+---------+------+--------+
+| empno | ename | job     | mgr  | hiredate   | sal     | comm | deptno |
++-------+-------+---------+------+------------+---------+------+--------+
+|  7788 | SCOTT | ANALYST | 7566 | 1996-03-05 | 3000.00 | NULL |     20 |
++-------+-------+---------+------+------------+---------+------+--------+
+
+
+*/
+
+use fs;
+
+SELECT * FROM emp
+WHERE sal = (
+    SELECT sal FROM emp
+    ORDER BY sal DESC
+    LIMIT 1
+    OFFSET 1
+);
+
+
+// 4
+
+
+/*
+Write an SQL query to display employees whose salary is greater than the salary 
+of their respective manager.
+
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++-------+-------+---------+------+------------+---------+------+--------+
+| empno | ename | job     | mgr  | hiredate   | sal     | comm | deptno |
++-------+-------+---------+------+------------+---------+------+--------+
+|  7902 | FORD  | ANALYST | 7566 | 1997-12-05 | 3000.00 | NULL |     20 |
++-------+-------+---------+------+------------+---------+------+--------+
+
+
+*/
+
+use fs;
+
+SELECT e1.* FROM emp e1
+WHERE e1.sal > (
+    SELECT e2.sal FROM emp e2
+    WHERE e1.mgr=e2.empno
+);
+
+
+// 5
+
+/*
+Write an SQL query to list employees who earn more than the average salary of 
+their own department.
+
+
+Tables:
+------
+salgrade ==> grade int(4) primary key, losal decimal(10,2),  hisal decimal(10,2) 
+
+
+dept==>   deptno int(2) primary key, dname varchar(50) not null, location varchar(50) not null
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++-------+-------+-----------+------+------------+---------+------+--------+
+| empno | ename | job       | mgr  | hiredate   | sal     | comm | deptno |
++-------+-------+-----------+------+------------+---------+------+--------+
+|  7566 | JONES | MANAGER   | 7839 | 1995-10-31 | 2975.00 | NULL |     20 |
+|  7698 | BLAKE | MANAGER   | 7839 | 1992-06-11 | 2850.00 | NULL |     30 |
++-------+-------+-----------+------+------------+---------+------+--------+
+
+
+*/
+
+use fs;
+
+SELECT e.* FROM emp e
+WHERE e.sal > (
+    SELECT AVG(e1.sal) FROM emp e1
+    WHERE e.deptno=e1.deptno
+    GROUP BY e1.deptno
+);
