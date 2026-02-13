@@ -1,0 +1,134 @@
+Imagine you’re decoding a secret message that outlines the hierarchical structure 
+of a covert spy network. The message is a string composed of numbers and parentheses. 
+Here’s how the code works:
+
+- The string always starts with an agent’s identification number, this is the 
+  leader of the network.
+- After the leader’s ID, there can be zero, one, or two segments enclosed in 
+  parentheses. Each segment represents the complete structure of one subordinate 
+  network.
+- If two subordinate networks are present, the one enclosed in the first (leftmost) 
+  pair of parentheses represents the left branch, and the second (rightmost) 
+  represents the right branch.
+
+Your mission is to reconstruct the entire spy network hierarchy based on this 
+coded message.
+
+Example 1:
+Input: 4(2(3)(1))(6(5))
+Output: [4, 2, 6, 3, 1, 5]
+
+Spy network:
+        4
+       / \
+      2   6
+     / \  /
+    3   1 5
+
+Explanation:
+Agent 4 is the leader.
+Agent 2 (with its own subordinates 3 and 1) is the left branch.
+Agent 6 (with subordinate 5) is the right branch.
+
+Example 2:
+Input: 4(2(3)(-1))(6(5)(7))
+Output: [4, 2, 6, 3, -1, 5, 7]
+
+Spy network:
+         4
+       /   \
+      2     6
+     / \   / \
+    3  -1 5   7
+
+Explanation:
+Agent 4 leads the network.
+Agent 2 with subordinates 3 and 1 forms the left branch.
+Agent 6 with subordinates 5 and 7 forms the right branch.
+
+/*
+
+import java.util.*;
+
+class Node{
+    int val;
+    Node left;
+    Node right;
+    
+    Node(int val){
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+class Solution{
+    private static Node build(String expr, int l, int r){
+        if (l>r) return null;
+        
+        int neg = 0;
+        int val = 0;
+        while (l<=r && expr.charAt(l)>='0' && expr.charAt(l)<='9'){
+            if (expr.charAt(l)=='-'){
+                neg = 1;
+                continue;
+            }
+            val = val*10 + expr.charAt(l)-'0';
+            l++;
+        }
+        if (neg==1) val = -val;
+        Node root = new Node(val);
+        
+        if (l>r) return root;
+        
+        // 4(2(3)(1))(6(5))
+        // [4, 2, 6, 3, 1, 5]
+        
+        if (l<=r && expr.charAt(l)=='('){
+            int open=0;
+            int s = l;
+            while (l<=r){
+                if (expr.charAt(l)=='(') open++;
+                else if (expr.charAt(l)==')') open--;
+                l++;
+                if (open==0) break;
+            }
+            root.left = build(expr,s+1,l-1);
+        }
+        
+        if (l<=r && expr.charAt(l)=='('){
+            int open=0;
+            int s = l;
+            while (l<=r){
+                if (expr.charAt(l)=='(') open++;
+                else if (expr.charAt(l)==')') open--;
+                l++;
+                if (open==0) break;
+            }
+            root.right = build(expr,s+1,l-1);
+        }
+        return root;
+    }
+    
+    private static void levorder(Node root){
+        Queue<Node> qu = new LinkedList<>();
+        qu.offer(root);
+        while (!qu.isEmpty()){
+            Node cur = qu.poll();
+            System.out.print(cur.val + " ");
+            if (cur.left!=null) qu.offer(cur.left);
+            if (cur.right!=null) qu.offer(cur.right);
+        }
+        return;
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String expr = sc.nextLine();
+        int n = expr.length();
+        Node root = build(expr,0,n-1);
+        levorder(root);
+    }
+}
+
+*/
