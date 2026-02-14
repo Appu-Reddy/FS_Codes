@@ -1,0 +1,84 @@
+// 1
+
+Problem:
+
+For a given binary string 
+if it is even, divide by 2
+if it is odd, add + 1
+Return no of stes needed to convert number to 1
+NOTE: dont convert to integer from binary string
+
+Input: 110
+Output: 3
+Explanation: 110 --> 011 -> 100 -> 010 -> 001
+
+Input: 101
+Output: 5
+Explantion: 101 --> 110 --> 011 --> 100 --> 010 --> 001
+
+// in backend there are test case of 0's and 1's of length ~10^6
+// so converting to int / long would not work
+// do on strings using bit manipulation
+
+// 2
+
+LC - 1448
+
+// 3
+
+Problem:
+
+Due to COVID restrictions, passengers in a metro 
+train cannot sit in two horizontally adjacent seats. 
+The train has two rows of seats facing each other, 
+each with n seats. 
+Vertical adjacency (sitting opposite someone) is allowed.
+Calculate the total number of valid ways to place passengers in the train.
+
+Input: 1
+Output: 4
+Explantion: 
+The 4 ways are
+- -
+P - 
+- P
+P P
+
+Input: 2
+Output: 9
+Explanation:
+The 9 ways are
+- -
+- - 
+
+- - 
+P -
+
+- -
+- P
+
+P - 
+- -
+
+- P
+- -
+
+P -
+P -
+
+P -
+- P
+
+- P
+P -
+
+- P
+- P
+
+// Queries:
+
+SQL-1: Find sal > avg sal of all employees
+SQL-2: Find emp whose sal > max sal of employee of same deptartment
+
+Mongo-1: Find total_achievements grouped by level -- (groupby + project)
+Mongo-2: FInd total_students grouped by achievements -- (lookup + groupby + project)
