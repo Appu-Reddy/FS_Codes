@@ -26,7 +26,7 @@ LC - 1448
 
 // 3
 
-Problem:
+Problem: --- (~~ LC 2320)
 
 Due to COVID restrictions, passengers in a metro 
 train cannot sit in two horizontally adjacent seats. 
