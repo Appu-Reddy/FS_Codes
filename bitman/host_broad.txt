@@ -1,0 +1,179 @@
+Write a program that takes an IP address and subnet mask (in CIDR notation, 
+e.g., 192.168.1.1/24) as input and calculates the network and broadcast addresses.
+
+Input Format:
+---------------
+A String, IPAddress
+An integer, CIDR
+
+Output Format:
+---------------
+Space separated IP addresses, network IP and broadcast IP.
+
+
+Sample Input-1:
+-----------------
+192.168.1.10
+24
+
+Sample Output-1:
+------------------
+192.168.1.0 192.168.1.255
+
+
+Sample Input-2:
+-----------------
+192.0.2.1
+24
+
+Sample Output-2:
+------------------
+192.0.2.0 192.0.2.255
+
+/*
+
+import java.util.*;
+
+class Solution{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String[] ip = sc.nextLine().split("\\.");
+        int cidr = sc.nextInt();
+        int o1 = Integer.parseInt(ip[0]);
+        int o2 = Integer.parseInt(ip[1]);
+        int o3 = Integer.parseInt(ip[2]);
+        int o4 = Integer.parseInt(ip[3]);
+        int n1=o1,n2=o2,n3=o3,n4=o4;
+        int h1=o1,h2=o2,h3=o3,h4=o4;
+        int rmng = 32 - cidr;
+        // 10
+        // 00001010
+        // 00000000
+        // 11111111
+        
+        if (rmng>0){
+            if (rmng>=8){
+                n4 = 0;
+                rmng -= 8;
+            }
+            else{
+                int mask = 256 - (1 << rmng);
+                n4 = n4 & mask;
+                rmng = 0;
+            }
+        }
+        if (rmng>0){
+            if (rmng>=8){
+                n3 = 0;
+                rmng -= 8;
+            }
+            else{
+                int mask = 256 - (1 << rmng);
+                n3 = n3 & mask;
+                rmng = 0;
+            }
+        }
+        if (rmng>0){
+            if (rmng>=8){
+                n2 = 0;
+                rmng -= 8;
+            }
+            else{
+                int mask = 256 - (1 << rmng);
+                n2 = n2 & mask;
+                rmng = 0;
+            }
+        }
+        if (rmng>0){
+            if (rmng>=8){
+                n1 = 0;
+                rmng -= 8;
+            }
+            else{
+                int mask = 256 - (1 << rmng);
+                n1 = n1 & mask;
+                rmng = 0;
+            }
+        }
+        
+        System.out.print(n1 + "." + n2 + "." + n3 + "." + n4 + " ");
+        
+        rmng = 32 - cidr;
+        if (rmng>0){
+            if (rmng>=8){
+                h4 = 255;
+                rmng -= 8;
+            }
+            else{
+                int mask = (1 << rmng) - 1;
+                h4 = h4 | mask;
+                rmng = 0;
+            }
+        }
+        if (rmng>0){
+            if (rmng>=8){
+                h3 = 255;
+                rmng -= 8;
+            }
+            else{
+                int mask = (1 << rmng) - 1;
+                h3 = h3 | mask;
+                rmng = 0;
+            }
+        }
+        if (rmng>0){
+            if (rmng>=8){
+                h2 = 255;
+                rmng -= 8;
+            }
+            else{
+                int mask = (1 << rmng) - 1;
+                h2 = h2 | mask;
+                rmng = 0;
+            }
+        }
+        if (rmng>0){
+            if (rmng>=8){
+                h1 = 255;
+                rmng -= 8;
+            }
+            else{
+                int mask = (1 << rmng) - 1;
+                h1 = h1 | mask;
+                rmng = 0;
+            }
+        }
+        
+        System.out.println(h1 + "." + h2 + "." + h3 + "." + h4);
+    }
+}
+
+// import java.util.*;
+
+// public class Solution {
+//     public static void main(String[] args) {
+//         Scanner sc = new Scanner(System.in);
+//         String ip = sc.nextLine();
+//         String[] arr = ip.split("\\.");
+//         long num = 0;
+//         int cidr = sc.nextInt();
+//         for (int i=0; i<4; i++){
+//             num = (num << 8) | Integer.parseInt(arr[i]);
+//         }
+//         long mask = (0xFFFFFFFFL << (32 - cidr)) & 0xFFFFFFFFL;
+//         long net = num & mask;
+//         long broad = net | (~mask & 0xFFFFFFFFL);
+        
+//         System.out.print(ipint(net) + " ");
+//         System.out.println(ipint(broad));
+//     }
+    
+//     static String ipint(long num){
+//         return ((num >> 24) & 255) + "." +
+//               ((num >> 16) & 255) + "." +
+//               ((num >> 8) & 255) + "." +
+//               (num & 255);
+//     }
+// }
+
+*/
