@@ -8,12 +8,14 @@ Redis
 Celery
 Multi-threading
 Sessions
-CSRF Attacks
 OAuth2.0
+Rate Limiting
+
+
+CSRF Attacks
 SQL Injection
 DoS Attacks
-Rate Limiting
-Brute-force logging failure locking
+Brute-force logging failure locking - lock after 5 wrong attempts
 
 
 Metrics:
@@ -22,3 +24,6 @@ Precision, Accuracy, TPR, FPR, ROC-AUC, Confidence Interval
 Decision Trees
 Random Forest
 Gradient Boosting
+Data Drifts -- mean, variance, distribution
+Histogram data drift algo
+KL divergence
