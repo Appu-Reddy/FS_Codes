@@ -1,0 +1,149 @@
+Imagine you're the curator of an ancient manuscript archive. Each manuscript is 
+assigned a unique significance score, and the archive is arranged so that every 
+manuscript on the left has a lower score and every manuscript on the right has 
+a higher score, forming a special ordered display. Now, for an upcoming exhibition, 
+scholars have decided that only manuscripts with significance scores between 
+low and high (inclusive) are relevant. Your task is to update the archive by 
+removing any manuscripts whose scores fall outside the range [low, high]. 
+
+Importantly, while you remove some manuscripts, you must preserve the relative 
+order of the remaining ones—if a manuscript was originally displayed as a 
+descendant of another, that relationship should remain intact. It can be proven 
+that there is a unique way to update the archive.
+
+Return the main manuscript of the updated archive. Note that the main manuscript 
+(the root) may change depending on the given score boundaries.
+
+Input format:
+Line 1: space separated scores to build the manuscript archive
+Line 2: two space seperated integers, low and high.
+
+Output format:
+space separated scores of the updated archeive
+
+Example 1:
+input=
+1 0 2
+1 2
+output=
+1 2
+
+Explanation:
+Initial archieve:
+      1
+     / \
+    0   2
+
+
+Updated archieve:
+    1
+     \
+      2
+After removing manuscripts scores below 1 (i.e. 0), only the manuscript with 1
+and its right manuscript 2 remain.
+
+Example 2:
+input=
+3 0 4 2 1
+1 3
+output=
+3 2 1
+
+Explanation:
+Initial archieve:
+          3
+         / \
+        0   4
+         \
+          2
+         /
+        1
+
+Updated archieve:
+      3
+     /
+    2
+   /
+  1
+
+  /*
+
+  import java.util.*;
+
+class Node{
+    int val;
+    Node left;
+    Node right;
+    Node (int val){
+        this.val = val;
+    }
+}
+
+class Solution{
+    private static Node root;
+    
+    private static Node insert(Node n, int val){
+        if (n==null){
+            return new Node(val);
+        }
+        if (val<n.val) n.left = insert(n.left,val);
+        else n.right = insert(n.right,val);
+        return n;
+    }
+    
+    private static void levorder(Node n){
+        if (n==null) return;
+        Queue<Node> qu = new LinkedList<>();
+        qu.offer(n);
+        while (!qu.isEmpty()){
+            Node cur = qu.poll();
+            System.out.print(cur.val + " ");
+            if (cur.left!=null) qu.offer(cur.left);
+            if (cur.right!=null) qu.offer(cur.right);
+        }
+        return;
+    }
+    
+    private static Node remove(Node n, int low, int high){
+        if (n==null) return null;
+        if (n.val<low){
+            return remove(n.right,low,high);
+        }
+        if (n.val>high){
+            return remove(n.left,low,high);
+        }
+        n.left = remove(n.left,low,high);
+        n.right = remove(n.right,low,high);
+        return n;
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String[] nodes = sc.nextLine().split(" ");
+        int low = sc.nextInt();
+        int high = sc.nextInt();
+        int n = nodes.length;
+        int[] arr = new int[n];
+        for (int i=0; i<n; i++) arr[i] = Integer.parseInt(nodes[i]);
+        
+        // boolean found = false;
+        // for (int i=0; i<n; i++){
+        //     int val = arr[i];
+        //     if (val<low || val>high) continue;
+        //     if (!found){
+        //         root = new Node(arr[i]);
+        //         found = true;
+        //     }
+        //     else insert(root,val);
+        // }
+        
+        root = new Node(arr[0]);
+        for (int i=1; i<n; i++){
+            insert(root,arr[i]);
+        }
+        Node r = remove(root,low,high);
+        levorder(r);
+    }
+}
+
+*/
