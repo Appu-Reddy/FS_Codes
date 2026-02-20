@@ -1,0 +1,93 @@
+A concert organizer has n stage lights, each with a certain brightness level.
+The lights must be placed in a circular arrangement around the stage.
+
+To ensure visual comfort, the organizer wants to minimize the maximum brightness 
+difference between any two adjacent lights.
+
+You are given an array brightness[] of size n, representing the brightness levels.
+
+Your task is to determine the minimum possible value of the maximum absolute 
+difference between adjacent lights in the circular arrangement.
+
+📥 Input Format
+---------------
+First line contains integer n
+Next line n space seperated integers, brightness values
+
+📤 Output Format
+----------------
+Print a single integer representing the smallest possible maximum adjacent difference.
+
+🔒 Constraints
+--------------
+2 ≤ n ≤ 10^5
+1 ≤ brightness[i] ≤ 10^9
+
+
+Sample Input-1
+--------------
+5
+1 2 3 4 5
+
+Sample Output-1
+---------------
+2
+
+Explanation
+-----------
+Optimal circular arrangement: 1 3 5 4 2
+Maximum adjacent difference = 2
+
+
+Sample Input-2
+---------------
+6
+10 3 7 12 5 9
+
+Sample Output-2
+---------------
+4
+
+Explanation
+-----------
+Best circular order: 3 7 10 12 9 5
+Maximum adjacent difference = 4
+
+/*
+
+import java.util.*;
+
+class Solution{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        for (int i=0; i<n; i++) arr[i] = sc.nextInt();
+        Arrays.sort(arr);
+        
+        int[] lights = new int[n];
+        int mid = (n-1)/2;
+        lights[mid] = arr[n-1];
+        int idx = n-2;
+        int l=mid-1, r=mid+1;
+        while (idx>=0){
+            if (l>=0){
+                lights[l] = arr[idx];
+                l--;
+                idx--;
+            }
+            if (r<n){
+                lights[r] = arr[idx];
+                r++;
+                idx--;
+            }
+        }
+        
+        int maxi = Integer.MIN_VALUE;
+        for (int i=1; i<n; i++) maxi = Math.max(Math.abs(lights[i]-lights[i-1]),maxi);
+        System.out.println(Math.max(maxi,Math.abs(lights[n-1]-lights[0])));
+        return;
+    }
+}
+
+*/

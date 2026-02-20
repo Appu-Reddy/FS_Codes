@@ -1,3 +1,5 @@
+WebDev:
+
 Idempotancy
 E-Tag
 Pagination
@@ -12,13 +14,16 @@ OAuth2.0
 Rate Limiting
 
 
+CS:
+
 CSRF Attacks
 SQL Injection
 DoS Attacks
 Brute-force logging failure locking - lock after 5 wrong attempts
 
 
-Metrics:
+ML:
+
 Pearson, Spearman, MCC, Confusion Matrix,
 Precision, Accuracy, TPR, FPR, ROC-AUC, Confidence Interval
 Decision Trees
@@ -27,3 +32,8 @@ Gradient Boosting
 Data Drifts -- mean, variance, distribution
 Histogram data drift algo
 KL divergence
+
+NN:
+
+Xavier weight initialization 
+Batch Normalization
