@@ -1,0 +1,111 @@
+You work for a national defense agency responsible for monitoring enemy ship 
+movements using advanced radar technology. The radar system generates a 
+2D grid representation of the sea, where each cell represents a segment of the ocean.
+	- The radar scans detect ships represented by 'X' in the grid.
+	- Each ship can either be horizontal or vertical, and multiple ships 
+	  can appear on the grid. 
+	- Ships are separated by at least one empty space ('.'), which means 
+	no two ships are adjacent to each other either horizontally or vertically.
+	
+Your task is to determine the total number of ships on the radar grid based on 
+the scan results. The radar grid provides information about both ship positions 
+and empty spaces.
+
+Input Format:
+-------------
+The first line contains two integers M and N, size of radar image.
+Next M lines: N space-separated integers, A 2D grid[][], radar image.
+
+Output Format:
+--------------
+An integer, the total number of ships on the radar.
+
+
+Sample Input-1:
+---------------
+3 4
+X . . X
+. . . X
+. . . X
+  
+
+Sample Output-1:
+----------------
+2
+
+Explanation:
+------------
+There are 2 battleships. One is positioned horizontally (in the first row), 
+and the other is positioned vertically (in the last column).
+
+
+Sample Input-2:
+---------------
+4 5
+. X . . .
+. X . . .
+. X . . .
+X . X X X 
+
+Sample Output-2:
+----------------
+3
+
+Explanation:
+------------
+1: The X cells in the second column (at positions (1,1), (2,1), and (3,1)) form 
+a vertical battleship. 
+
+2: The X cells in the fourth row (at positions (3,2), (3,3), and (3,4)) form a 
+horizontal battleship.
+
+3: The X cells at position (3,0) and (3,2) are isolated and don't connect to 
+any other X cells.  So, the total count of battleships are 3.
+
+Solution:
+
+import java.util.*;
+class test{
+    public static void dfs(char grid[][],boolean vis[][],int r,int c){
+        if(r<0 || r>=grid.length || c<0 ||c>=grid[0].length){
+            return;
+        }
+        if(vis[r][c]) return;
+
+        vis[r][c] = true;
+        if(grid[r][c]=='.') return;
+
+        int row[] = {1,0,-1,0};
+        int col[] = {0,1,0,-1};
+        for(int i=0; i<row.length; i++){
+            dfs(grid,vis,r+row[i],c+col[i]);
+        }
+    }
+
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        char grid[][] = new char[m][n];
+        boolean vis[][] = new boolean[m][n];
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                grid[i][j] = sc.next().charAt(0);
+            }
+        }
+        int c = 0;
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j]=='.'){
+                    vis[i][j] = true;
+                    continue;
+                }
+                else if(!vis[i][j]){
+                    dfs(grid,vis,i,j);
+                    c++;
+                }
+            }
+        }
+        System.out.print(c);
+    }
+}

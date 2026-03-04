@@ -1,0 +1,63 @@
+You're building a Movie Review Analyzer for a streaming platform. 
+Your application will:
+ - Read a list of N movies and their viewer ratings and reviews.
+ - Compute a popularity score based on ratings and review lengths.
+ - Classify movies as Blockbuster, Hit, or Flop.
+ - Output a summary report for each movie.
+
+Popularity Score Formula
+------------------------
+    - ratingScore = rating / 5.0
+    - reviewScore = min(1.0, reviewLength / 200.0)
+    - Final Score = (0.6 * ratingScore + 0.4 * reviewScore) * 100
+
+Movie Classification
+--------------------
+
+    | Score-Range| Classification|
+    ------------------------------
+    |  ≥ 80	     | Blockbuster   |
+    |  50–79	 | Hit           |
+    |  < 50	     | Flop          | 
+
+
+Tasks to Implement:
+-------------------
+- Create a POJO class Movie
+    - Fields: title, rating, review
+    - Constructor, getters, setters
+
+- Create a POJO class MovieReport
+    - Fields: Movie, score, category
+    - toString() to return formatted output
+
+- Define an interface MovieAnalyzer
+    - Method: MovieReport analyze(Movie movie);
+
+- Implement the interface in MovieAnalyzerImpl
+    - Compute the score
+    - Classify into category
+    - Return a MovieReport
+
+- Main class:
+    - Read N movies and their data from standard input
+    - Print formatted analysis for each
+
+Sample Input:
+-------------
+3
+Inception
+4.8
+Mind-bending thriller with amazing visuals and story.
+The Room
+1.5
+Terrible acting and editing. Poor direction.
+Interstellar
+4.5
+Science fiction masterpiece. Great concept and emotional depth.
+
+Sample Output
+-------------
+Movie: Inception, Score: 68.2, Category: Hit
+Movie: The Room, Score: 26.8, Category: Flop
+Movie: Interstellar, Score: 66.6, Category: Hit
