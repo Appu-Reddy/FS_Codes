@@ -1,0 +1,93 @@
+/*
+
+Write an SQL query to display the food_id and name of food items whose names 
+contain at least two consecutive vowels (a, e, i, o, u).
+
+Tables:
+------
+Customers (customer_id, first_name, last_name, email, phone, address) 
+FoodItems (food_id, name, description, price, category, availability)
+Orders (order_id, customer_id, food_id, quantity, status, total_amount, order_date, )
+
+OUTPUT:
++---------+----------------------+
+| food_id | name                 |
++---------+----------------------+
+|       1 | Paneer Butter Masala |
++---------+----------------------+
+
+*/
+
+use GT;
+
+SELECT food_id,name FROM FoodItems 
+WHERE name REGEXP '[aeiouAEIOU]{2,}';
+
+// 2
+
+/*
+Write an SQL query to display the full name and email of customers, along with 
+the food item name and its price, who ordered the most expensive food item(s) 
+available.
+
+
+Tables:
+------
+Customers (customer_id, first_name, last_name, email, phone, address) 
+FoodItems (food_id, name, description, price, category, availability)
+Orders (order_id, customer_id, food_id, quantity, status, total_amount, order_date, )
+
+OUTPUT:
+
++-------------+-----------------------+-----------------+--------+
+| full_name   | email                 | food_item       | price  |
++-------------+-----------------------+-----------------+--------+
+| Amit Sharma | amit.sharma@gmail.com | Chicken Biryani | 300.00 |
++-------------+-----------------------+-----------------+--------+
+*/
+
+use GT;
+
+SELECT CONCAT(c.first_name," ",c.last_name) AS full_name, c.email,f.name AS food_item, f.price 
+FROM Orders o
+JOIN Customers c ON c.customer_id=o.customer_id
+JOIN FoodItems f ON f.food_id=o.food_id
+WHERE price = (SELECT MAX(price) FROM FoodItems);
+
+
+// 3
+
+/*
+
+Write an SQL query to display the names of food items along with the total 
+quantity ordered for each item, showing only those items whose total ordered 
+quantity is greater than the average quantity ordered across all food items.
+
+Tables:
+------
+Customers (customer_id, first_name, last_name, email, phone, address) 
+FoodItems (food_id, name, description, price, category, availability)
+Orders (order_id, customer_id, food_id, quantity, status, total_amount, order_date, )
+
+OUTPUT:
++-------------+----------------+
+| name        | total_quantity |
++-------------+----------------+
+| Masala Dosa |              5 |
+| Samosa      |              9 |
++-------------+----------------+
+
+*/
+
+use GT;
+
+SELECT f.name, SUM(o.quantity) AS total_quantity FROM Orders o
+JOIN FoodItems f ON f.food_id=o.food_id
+GROUP BY f.food_id,f.name
+HAVING SUM(o.quantity) > (
+    SELECT AVG(total_qty) FROM (
+        SELECT SUM(quantity) AS total_qty
+        FROM Orders
+        GROUP BY food_id
+    ) AS avg_table
+);
