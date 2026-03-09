@@ -33,7 +33,17 @@ Data Drifts -- mean, variance, distribution
 Histogram data drift algo
 KL divergence
 
+
 NN:
 
 Xavier weight initialization 
 Batch Normalization
+
+
+AI:
+
+Transformers 
+-- Word2Vec, Attention is all you need research papers
+-- Word2Vec
+---- CBOW - Intro, Architecture, Workflow
+---- Skip Gram Algo
