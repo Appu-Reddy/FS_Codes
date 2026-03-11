@@ -47,3 +47,6 @@ Transformers
 -- Word2Vec
 ---- CBOW - Intro, Architecture, Workflow
 ---- Skip Gram Algo
+
+
+OCA
