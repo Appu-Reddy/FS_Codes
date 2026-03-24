@@ -1,0 +1,85 @@
+You are working in a genetics laboratory where you are tasked with correcting 
+DNA sequences. Each DNA strand is represented as a sequence of characters 'A', 
+'C', 'G', and 'T'. Sometimes, due to mutations or errors during sequencing, the 
+DNA strand (originalDNA) must be modified to match a targetDNA sequence exactly.
+
+You can perform the following mutation operations:
+- Insert a nucleotide (A, C, G, or T) into the DNA strand.
+- Delete a nucleotide from the DNA strand.
+- Replace a nucleotide with another one.
+
+Each operation counts as one step.
+
+Your task is to find the minimum number of mutation operations needed to 
+transform the originalDNA into the targetDNA.
+
+Input format:
+-------------
+2 space seperated strings, originalDNA, targetDNA
+
+Output format:
+--------------
+An integer, the minimum number of mutation operations
+
+
+Example 1:
+-----------
+Input:
+ACGT AGT
+
+Output:
+1
+
+Explanation:
+Delete 'C': "ACGT" → "AGT"
+Only 1 mutation is needed.
+
+Example 2:
+----------
+Input:
+GATTAC GCATGCU
+
+Output:
+4
+
+Explanation:
+- Replace 'A' with 'C': "GATTAC" → "GCTTAC"
+- Replace 'T' with 'A': "GCTTAC" → "GCATAC"
+- Replace 'A' with 'G': "GCATAC" → "GCATGC"
+- Insert 'U' at the end: "GCATGC" → "GCATGCU"
+
+Thus, 4 mutations are needed.
+
+/*
+
+import java.util.*;
+
+class Main{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String[] s = sc.nextLine().split(" ");
+        String s1 = s[0];
+        String s2 = s[1];
+        int m = s1.length();
+        int n = s2.length();
+        int[][] dp = new int[m+1][n+1];
+        
+        for (int i=0; i<=m; i++) dp[i][0] = i; // s1>0, s2==0
+        for (int j=0; j<=n; j++) dp[0][j] = j; // s1==0, s1>0
+        
+        for (int i=1; i<=m; i++){
+            for (int j=1; j<=n; j++){
+                if (s1.charAt(i-1)==s2.charAt(j-1)) 
+                    dp[i][j] = dp[i-1][j-1];
+                else 
+                    dp[i][j] = 1 + Math.min(
+                            dp[i-1][j-1],
+                            Math.min(dp[i][j-1],dp[i-1][j])
+                        );
+            }
+        }
+        System.out.println(dp[m][n]);
+    }
+}
+
+*/
