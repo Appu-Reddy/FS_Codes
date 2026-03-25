@@ -1,0 +1,162 @@
+// 1
+
+/*
+Management wants to compare all employees across the company.
+Assign a rank to employees based on salary across the entire company 
+(not departmentwise). Employees with the same salary should share the same rank, 
+and the next rank should be skipped.
+
+
+Tables:
+------
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+OUTPUT:
++--------+---------+-------------+                                                                                                                    
+| ename  | sal     | global_rank |                                                                                                                    
++--------+---------+-------------+                                                                                                                    
+| KEVIN  | 5000.00 |           1 |                                                                                                                    
+| SCOTT  | 3000.00 |           2 |                                                                                                                    
+| FORD   | 3000.00 |           2 |                                                                                                                    
++--------+---------+-------------+ 
+
+*/
+
+use fs;
+
+SELECT ename,sal,RANK() OVER(ORDER BY sal DESC) AS global_rank FROM emp;
+
+
+// 2
+
+/*
+Within each department, assign ranks to employees based on salary such that employees
+with equal salaries share the same rank, and ranks are consecutive without gaps.
+
+
+Tables:
+------
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++--------+--------+---------+----------------+
+| ename  | deptno | sal     | dept_dense_ran |
++--------+--------+---------+----------------+
+| CLARK  |     10 | 2450.00 |              1 |
+| ALLEN  |     10 | 1600.00 |              2 |
+| FORD   |     10 | 1300.00 |              3 |
++--------+--------+---------+----------------+
+
+*/
+
+use fs;
+
+SELECT ename,deptno,sal,
+    DENSE_RANK() OVER(PARTITION BY deptno ORDER BY sal DESC) AS dept_dense_ran 
+FROM emp;
+
+
+// 3
+
+/*
+Assign ranks to employees based on salary such that if multiple employees have 
+the same salary, they receive the same rank, and no ranks are skipped.
+
+
+Tables:
+------
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++--------+---------+------------+
+| ename  | sal     | dense_rank |
++--------+---------+------------+
+| KEVIN  | 5000.00 |          1 |
+| SCOTT  | 3000.00 |          2 |
+| FORD   | 3000.00 |          2 |
++--------+---------+------------+
+
+*/
+
+use fs;
+
+SELECT ename,sal,
+    DENSE_RANK() OVER(ORDER BY sal DESC) AS "dense_rank"
+FROM emp;
+
+// 4
+
+/*
+Identify employees who earn the lowest salary in each department.
+If multiple employees share the same lowest salary, include all of them.
+
+
+Tables:
+------
+
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++--------+--------+---------+-----+
+| ename  | deptno | sal     | rnk |
++--------+--------+---------+-----+
+| FORD   |     10 | 1300.00 |   1 |
+| SMITH  |     20 |  800.00 |   1 |
++--------+--------+---------+-----+
+
+*/
+
+use fs;
+
+SELECT * FROM (
+    SELECT ename, deptno, sal, RANK() OVER (PARTITION BY deptno ORDER BY sal) AS rnk
+    FROM emp
+) t
+WHERE rnk=1;
+
+// 5
+
+/*
+Find employees who fall under the same salary rank category (rank 1 or rank 2) 
+within their respective departments. This helps identify top and mid-level 
+performers across all departments.
+
+
+Tables:
+------
+emp ==>   empno int(4) primary key, ename varchar(50) not null,
+          job varchar(50) not null,  mgr int(4),  hiredate date,
+          sal decimal(10,2),  comm decimal(10,2),  deptno int(2)
+
+
+OUTPUT:
++--------+--------+---------+-----+
+| ename  | deptno | sal     | rnk |
++--------+--------+---------+-----+
+| CLARK  |     10 | 2450.00 |   1 |
+| ALLEN  |     10 | 1600.00 |   2 |
++--------+--------+---------+-----+
+
+
+*/
+
+use fs;
+
+SELECT * FROM (
+    SELECT ename, deptno, sal, DENSE_RANK() OVER (PARTITION BY deptno ORDER BY sal DESC) AS rnk
+    FROM emp
+) t
+WHERE rnk IN (1,2);
