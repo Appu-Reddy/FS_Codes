@@ -1,0 +1,81 @@
+Mr Parandhamayya working with words.
+He is given a word W, you need to divide the word into N non-empty parts, 
+such that all the newly formed words should be distinct, and 
+if you append all those words should form original word W.
+
+Your task is to help Mr Parandhamayya to divide the word into N parts,
+such that, the value of N should be maximized, and print N.
+
+Input Format:
+-------------
+Line-1: A string W, a word.
+
+Output Format:
+--------------
+Print an integer result, the value of N.
+
+
+Sample Input-1:
+---------------
+banana
+
+Sample Output-1:
+----------------
+4
+
+Explanation: 
+------------
+One way to divide the word is "b","a","n","ana".
+If you divide it like "b","a","n","an","a".The word "a" will be repeated.
+So it is not allowed to divide like the second way.
+
+
+
+Sample Input-2:
+---------------
+mississippi
+
+Sample Output-2:
+----------------
+7
+
+Explanation: 
+------------
+One of the way to divide the word is "m","i","s","si","ssi","p","pi".
+
+NOTE: Subsequences are not allowed.
+
+/*
+
+import java.util.*;
+
+class Solution{
+    private static int maxl = 0;
+    private static void helper(String s, int idx, Set<String> st){
+        if (idx==s.length()){
+            maxl = Math.max(maxl,st.size());
+            return;
+        }
+        int ways = 0;
+        StringBuilder sb = new StringBuilder();
+        for (int i=idx; i<s.length(); i++){
+            sb.append(s.charAt(i));
+            String sub = sb.toString();
+            if (!st.contains(sub)){
+                st.add(sub);
+                helper(s,i+1,st);
+                st.remove(sub);
+            }
+        }   
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String s = sc.next();
+        Set<String> st = new HashSet<>();
+        helper(s,0,st);
+        System.out.println(maxl);
+    }
+}
+
+*/

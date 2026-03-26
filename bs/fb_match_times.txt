@@ -1,0 +1,96 @@
+Indian Super League organizing a football match at Eden Gardens.
+The teams are Bangalore and Chennai are playing opposite each other.
+
+After Match starts, each team making some goals at certain time, 
+for example, goal 'goal[i]' was made by a player at time 'time[i]'.
+goal[i]: indicates the team number 0 (Bangalore) or 1 (Chennai).
+time[i]: indicates the time of the goal made.
+
+Now, your task is to find out the leading team at given time t[j].
+
+Input Format:
+------------------
+Line-1: Two integers N and K, no of goals-> goal[i] and no of times-> t[j]
+Line-2: N space seperated integers only 0's and 1', goals[i]
+Line-3: N space seperated integers, time[i]
+Line-4: K space seperated integers , t[i]
+ 
+Output Format:
+------------------
+Print K space seperated integers as result.
+
+
+Sample Input-1:
+---------------
+7 5
+0 1 1 0 0 1 0
+0 5 10 15 20 25 30
+3 12 25 15 24
+
+Sample Output-1:
+----------------
+0 1 1 0 0
+
+Explanation:
+------------
+At time 3, the goals are [0], and 0 is leading.
+At time 12, the goals are [0,1,1], and 1 is leading.
+At time 25, the goals are [0,1,1,0,0,1], and 1 is leading (as ties go to the most recent goal)
+At time 15, the goals are [0,1,1,0], and 0 is leading (as ties go to the most recent goal)
+At time 24, the goals are [0,1,1,0,0], and 0 is leading.
+
+/*
+
+import java.util.*;
+
+class Solution{
+    private static int helper(int[] goals, int[] pfx, int tart, int[] times){
+        // find most recent time
+        int n = times.length;
+        int l = 0, r = n-1, tidx = -1;
+        while (l<=r){
+            int mid = l + (r-l)/2;
+            if (times[mid]==tart){
+                tidx = mid;
+                break;
+            }
+            if (times[mid]<tart){
+                tidx = mid;
+                l = mid+1;
+            }
+            else r = mid-1;
+        }
+        if (tidx==-1) return -1;
+        
+        if (pfx[tidx]>0) return 1;
+        else if (pfx[tidx]<0) return 0;
+        else return goals[tidx];
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+        int[] goals = new int[n];
+        int[] times = new int[n];
+        for (int i=0; i<n; i++) goals[i] = sc.nextInt();
+        for (int i=0; i<n; i++) times[i] = sc.nextInt();
+        
+        int[] pfx = new int[n];
+        pfx[0] = goals[0]==0 ? -1 : 1;
+        int c = pfx[0];
+        for (int i=1; i<n; i++){
+            if (goals[i]==0) c--;
+            else c++;
+            pfx[i] = c;
+        }
+        
+        while (k-->0){
+            int t = sc.nextInt();
+            int wint = helper(goals,pfx,t,times);
+            System.out.print(wint + " ");
+        }
+    }
+}
+
+*/
