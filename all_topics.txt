@@ -42,11 +42,21 @@ Batch Normalization
 
 AI:
 
-Transformers 
+Transformers:
 -- Word2Vec, Attention is all you need research papers
 -- Word2Vec
 ---- CBOW - Intro, Architecture, Workflow
 ---- Skip Gram Algo
+-- Encoder blocks
+-- Decoder blocks
+-- Codes
+
+
+Reasoning in AI:
+-- Chain Of Thought -- CoT
+-- ReAct Paper
+-- Tree Of Thought -- ToT
+-- Agentic AI
 
 
 OCA
