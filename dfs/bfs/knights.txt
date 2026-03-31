@@ -1,0 +1,95 @@
+You are designing an autonomous surveillance drone that operates 
+over an infinite 2D grid representing terrain coordinates.
+
+The drone starts at position (0, 0).
+
+In a single step, the drone can move in an L-shaped pattern. From 
+a position (p, q), it can move to any of the following positions:
+(p − 2, q − 1), (p − 2, q + 1), (p + 2, q − 1), (p + 2, q + 1)
+(p − 1, q + 2), (p + 1, q + 2), (p − 1, q − 2), (p + 1, q − 2)
+
+Given two integers m and n, representing the target position (m, n), determine:
+The minimum number of steps required for the drone to reach the target 
+from (0, 0).
+
+
+Input Format:
+-----------------
+Two space separated integers, m and n, position.
+
+Output Format:
+------------------
+Print an integer, minimum number of steps to reach (m,n).
+
+
+Sample Input-1:
+---------------
+2 4
+
+Sample Output-1:
+----------------
+2
+
+Explanation:
+-------------
+Initially, you are at (0,0) position, you can reach (2,4) as follows:
+(0,0) -> (1, 2) -> (2, 4) 
+
+
+Sample Input-2:
+---------------
+4 7
+
+Sample Output-2:
+----------------
+5
+
+Explanation:
+------------
+Initially, you are at (0,0) position, you can reach (4,7) as follows:
+(0,0) -> (1, 2) -> (2, 4) -> (1, 6) -> (3, 5) -> (4, 7)
+
+/*
+
+import java.util.*;
+
+class Solution{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        // (p − 2, q − 1), (p − 2, q + 1), (p + 2, q − 1), (p + 2, q + 1)
+        // (p − 1, q + 2), (p + 1, q + 2), (p − 1, q − 2), (p + 1, q − 2)
+        int[] rs = {-2,-2,2,2,-1,1,-1,1};
+        int[] cs = {-1,1,-1,1,2,2,-2,-2};
+        
+        Set<String> st = new HashSet<>();
+        Queue<int[]> qu = new LinkedList<>();
+        qu.add(new int[]{0,0,0});
+        
+        st.add(0 + "::" + 0);
+        
+        while (!qu.isEmpty()){
+            int[] cur = qu.poll();
+            if (cur[0]==m && cur[1]==n){
+                System.out.println(cur[2]);
+                SELECT ename,sal,RANK() OVER(ORDER BY sal DESC) AS global_rank FROM emcreturn;
+
+vx
+            }
+            for (int i=0; i<8; i++){
+                int nr = cur[0] + rs[i];
+                int nc = cur[1] + cs[i];
+                String key = nr + "::" + nc;
+                if (!st.contains(key)){
+                    st.add(key);
+                    qu.offer(new int[]{nr,nc,cur[2]+1});
+                }
+            }
+        }
+        
+        System.out.println(-1);
+    }
+}
+
+*/

@@ -1,0 +1,128 @@
+Imagine you’re decoding a secret message that outlines the hierarchical structure 
+of a covert spy network. The message is a string composed of numbers and parentheses. 
+Here’s how the code works:
+
+- The string always starts with an agent’s identification number, this is the 
+  leader of the network.
+- After the leader’s ID, there can be zero, one, or two segments enclosed in 
+  parentheses. Each segment represents the complete structure of one subordinate 
+  network.
+- If two subordinate networks are present, the one enclosed in the first (leftmost) 
+  pair of parentheses represents the left branch, and the second (rightmost) 
+  represents the right branch.
+
+Your mission is to reconstruct the entire spy network hierarchy based on this 
+coded message.
+
+Example 1:
+Input: 4(2(3)(1))(6(5))
+Output: [4, 2, 6, 3, 1, 5]
+
+Spy network:
+        4
+       / \
+      2   6
+     / \  /
+    3   1 5
+
+Explanation:
+Agent 4 is the leader.
+Agent 2 (with its own subordinates 3 and 1) is the left branch.
+Agent 6 (with subordinate 5) is the right branch.
+
+Example 2:
+Input: 4(2(3)(-1))(6(5)(7))
+Output: [4, 2, 6, 3, -1, 5, 7]
+
+Spy network:
+         4
+       /   \
+      2     6
+     / \    / \
+    3   -1 5   7
+
+Explanation:
+Agent 4 leads the network.
+Agent 2 with subordinates 3 and 1 forms the left branch.
+Agent 6 with subordinates 5 and 7 forms the right branch.
+
+
+/*
+
+import java.util.*;
+
+class Node{
+    int val;
+    Node left,right;
+    Node(int val){
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+class Solution{
+    private static Node helper(String s, int st, int e){
+        if (st>e) return null;
+        
+        int num = 0;
+        int i = st;
+        int neg = 1;
+        if (i<=e && s.charAt(i)=='-'){
+            neg = -1;
+            i++;
+        }
+        while (i<=e && Character.isDigit(s.charAt(i))){
+            num = num*10 + (s.charAt(i)-'0');
+            i++;
+        }
+        Node r = new Node(num*neg);
+        int idx = i;
+        
+        if (idx<=e && s.charAt(idx)=='('){
+            int ls = idx;
+            int oc = 0;
+            int cc = 0;
+            while (idx<=e){
+                if (s.charAt(idx)=='(') oc++;
+                else if (s.charAt(idx)==')') cc++;
+                if (oc==cc) break;
+                idx++;
+            }
+            r.left = helper(s,ls+1,idx-1);
+            idx++;
+        }
+        
+        if (idx<=e && s.charAt(idx)=='('){
+            int rs = idx;
+            int oc = 0;
+            int cc = 0;
+            while (idx<=e){
+                if (s.charAt(idx)=='(') oc++;
+                else if (s.charAt(idx)==')') cc++;
+                if (oc==cc) break;
+                idx++;
+            }
+            r.right = helper(s,rs+1,idx-1);
+        }
+        
+        return r;
+    }
+    
+    private static void postorder(Node root){
+        if (root==null) return;
+        postorder(root.left);
+        postorder(root.right);
+        System.out.print(root.val + " ");
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        String s = sc.next();
+        Node root = helper(s,0,s.length()-1);
+        postorder(root);
+        return;
+    }
+}
+
+*/
