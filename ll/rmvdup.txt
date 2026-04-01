@@ -1,0 +1,87 @@
+Cliff Shaw is working on the singly linked list.
+He is given a list of boxes arranged as singly linked list, where each box is 
+printed with a positive number on it and arranged in the list are ascending order.
+and numbers on the boxes may be repeated.
+
+Mr Cliff Shaw is performing an operation on the list.
+	-  To have only the distinct values in the final list,
+	removed all duplicate values.
+
+Your task is to help Mr Cliff to perform the operation and return the updated list
+
+Input Format:
+-------------
+Line-1: An integer, N number of boxes in list.
+Line-2: N space separated integers, boxes as list.
+
+Output Format:
+--------------
+Print the updated list.
+
+
+Sample Input-1:
+---------------
+8
+1 1 1 2 2 3 3 4
+
+Sample Output-1:
+----------------
+1 2 3 4
+
+
+Sample Input-2:
+---------------
+5
+1 1 1 1 1
+
+Sample Output-2:
+----------------
+1
+
+
+/*
+
+import java.util.*;
+
+class Node{
+    int val;
+    Node next;
+    Node(int val){
+        this.val = val;
+    }
+}
+
+class Solution{
+    private static Node head;
+    
+    private static void printlist(Node head){
+        if (head==null) return;
+        while (head!=null){
+            System.out.print(head.val + " ");
+            head = head.next;
+        }
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+    
+        Node head = new Node(sc.nextInt());
+        Node temp = head;
+        n--;
+        while (n-->0){
+            temp.next = new Node(sc.nextInt());
+            temp = temp.next;
+        }
+        
+        Node h1 = head;
+        while (h1.next!=null){
+            if (h1.val==h1.next.val) h1.next = h1.next.next;
+            else h1 = h1.next;
+        }
+        
+        printlist(head);
+    }
+}
+
+*/
