@@ -1,0 +1,77 @@
+A company manager is distributing bonuses to employees standing in a line based 
+on their performance ratings.
+
+Rules:
+    - Every employee must receive at least 1 bonus unit.
+    - If an employee has a higher rating than their immediate neighbor, they 
+      must receive more bonus units than that neighbor.
+
+Return the minimum total bonuses required.
+
+Input Format:
+-------------
+Line-1: An integer N, number of employees
+Line-2: N space separated integers, ratings[]
+
+Output Format:
+--------------
+An integer, minimum total bonuses.
+
+
+Sample Input-1:
+---------------
+5
+1 3 4 5 2
+
+Sample Output-1:
+----------------
+11
+
+Explanation: 
+------------
+Employees in the line will get these points: 1, 2, 3, 4, 1
+
+
+Sample Input-2:
+---------------
+5
+1 0 2 1 3
+
+Sample Output-2:
+----------------
+8
+
+Explanation: 
+------------
+Employees in the line will get these points: 2, 1, 2, 1, 2
+
+
+/*
+
+import java.util.*;
+
+class Solution{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] emp = new int[n];
+        for (int i=0; i<n; i++) emp[i] = sc.nextInt();
+        
+        int[] bon = new int[n];
+        Arrays.fill(bon,1);
+        for (int i=1; i<n; i++){
+            if (emp[i]>emp[i-1]){
+                bon[i] = bon[i-1] + 1;
+            }
+        }
+        
+        for (int i=n-2; i>=0; i--){
+            if (emp[i]>emp[i+1]){
+                bon[i] = Math.max(bon[i],bon[i+1] + 1);
+            }
+        }
+        System.out.println(Arrays.stream(bon).sum());
+    }
+}
+
+*/

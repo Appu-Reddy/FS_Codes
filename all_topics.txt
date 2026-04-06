@@ -59,4 +59,16 @@ Reasoning in AI:
 -- Agentic AI
 
 
+Metrics
+-- MSE
+-- MAE 
+-- Huber Loss
+-- BCE
+-- CCE
+-- KL Divergence
+-- Cosine Similarty Loss
+-- Contrastive Loss (CLIP)
+-- Triplet Loss
+-- Focal Loss
+
 OCA
