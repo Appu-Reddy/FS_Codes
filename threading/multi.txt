@@ -1,0 +1,106 @@
+In an e-commerce system, multiple orders are processed concurrently.
+
+Each order goes through 3 logical steps:
+	- Thread A → Reads base price
+	- Thread B → Applies discount:
+		If price ≥ 1000 → 10% discount
+		Else → 5% discount
+	- Thread C → Returns final payable amount
+
+Each order runs independently using Callable.
+
+Input Format:
+-------------
+Line-1: Integer N
+Line-2: N space-separated integers (prices)
+
+Output Format:
+--------------
+Print final payable amounts
+
+
+Sample Input:
+-------------
+5
+1000 500 2000 300 1500
+
+Sample Output:
+--------------
+900 475 1800 285 1350
+
+
+/*
+
+import java.util.*;
+import java.util.concurrent.*;
+
+class Solution {
+    static class Reading implements Callable<int[]>{
+        Scanner sc;
+        int n;
+
+        Reading(Scanner sc, int n){
+            this.sc = sc;
+            this.n = n;
+        }
+
+        public int[] call(){
+            int[] arr = new int[n];
+            for (int i = 0; i < n; i++){
+                arr[i] = sc.nextInt();
+            }
+            return arr;
+        }
+    }
+
+    static class Processor implements Callable<int[]> {
+        Future<int[]> input;
+
+        Processor(Future<int[]> input){
+            this.input = input;
+        }
+
+        public int[] call() throws Exception {
+            int[] arr = input.get();
+            int[] res = new int[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] >= 1000)
+                    res[i] = arr[i] - arr[i]*10/100;
+                else
+                    res[i] = arr[i] - arr[i]*5/100;
+            }
+            return res;
+        }
+    }
+
+    static class Printing implements Callable<Void> {
+        Future<int[]> input;
+
+        Printing(Future<int[]> input) {
+            this.input = input;
+        }
+
+        public Void call() throws Exception {
+            int[] arr = input.get();
+
+            for (int x : arr) System.out.print(x + " ");
+            return null;
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+
+        ExecutorService ex = Executors.newFixedThreadPool(3);
+
+        Future<int[]> f1 = ex.submit(new Reading(sc,n));
+        Future<int[]> f2 = ex.submit(new Processor(f1));
+        Future<Void> f3 = ex.submit(new Printing(f2));
+
+        f3.get();
+        ex.shutdown();
+    }
+}
+
+*/
