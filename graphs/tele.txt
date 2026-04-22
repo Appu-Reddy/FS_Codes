@@ -1,0 +1,129 @@
+A Telephone Line Company (TLC) is establishing a new telephone cable network 
+among several places numbered by integers from 1 to N. Each place has exactly 
+one telephone exchange. Lines connecting these exchanges are bidirectional, 
+and it's possible to reach every place from every other place, directly or 
+indirectly through other exchanges.
+
+Occasionally, an exchange might fail due to power outages. If the failure of an 
+exchange makes it impossible for some other exchanges to communicate, 
+the failed exchange is considered critical.
+Write a Java program to count and output the number of critical places in this network.
+
+Input format:
+-------------
+The first line contains an integer N (< 100), representing the number of places.
+Each subsequent line contains a place number followed by numbers representing places directly connected to it.
+The block of input ends with a single line containing 0.
+
+Output format:
+--------------
+An integer, the number of critical places.
+
+Example 1:
+----------
+Input=
+5
+5 1 2 3 4
+0
+
+Output=
+1
+
+Explanation:
+       5
+    / | \ \
+   1  2  3 4
+
+Removing place 5: Disconnects places {1, 2, 3, 4}, as there is no other path between them.
+
+
+Example 2:
+----------
+Input=
+4
+1 2
+2 3
+3 4
+0
+
+Output= 2
+
+Explanation:
+Places form a linear chain:
+1 - 2 - 3 - 4
+
+Critical places:
+- 2 (disconnects 1 from {3,4})
+- 3 (disconnects 4 from {1,2})
+
+/*
+
+import java.util.*;
+
+public class Main{
+    static ArrayList<Integer>[] graph;
+    static boolean[] vis;
+
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        graph = new ArrayList[n + 1];
+        for (int i = 1; i <= n; i++) graph[i] = new ArrayList<>();
+
+        while (true) {
+            String line = sc.nextLine().trim();
+            if (line.equals("0")) break;
+
+            String[] parts = line.split(" ");
+            int u = Integer.parseInt(parts[0]);
+
+            for (int i = 1; i < parts.length; i++){
+                int v = Integer.parseInt(parts[i]);
+                graph[u].add(v);
+                graph[v].add(u);
+            }
+        }
+
+        int count = 0;
+
+        for (int remove = 1; remove <= n; remove++){
+            vis = new boolean[n+1];
+
+            int start = -1;
+            for (int i=1; i<=n; i++) {
+                if (i != remove) {
+                    start = i;
+                    break;
+                }
+            }
+
+            dfs(start, remove);
+
+            boolean disconnected = false;
+            for (int i=1; i<=n; i++) {
+                if (i != remove && !vis[i]) {
+                    disconnected = true;
+                    break;
+                }
+            }
+
+            if (disconnected) count++;
+        }
+
+        System.out.println(count);
+    }
+
+    static void dfs(int node, int rem) {
+        vis[node] = true;
+
+        for (int nei : graph[node]) {
+            if (nei != rem && !vis[nei]) {
+                dfs(nei, rem);
+            }
+        }
+    }
+}
+
+*/

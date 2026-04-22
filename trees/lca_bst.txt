@@ -1,0 +1,83 @@
+In the dangerous Binary Sea, pirate ships are arranged in a Binary Search Tree 
+based on their treasure value.
+
+Two pirates (P and Q) want to meet at the safest common island. 
+This island must be the Lowest Common Ancestor (LCA) of their positions.
+
+Using the BST property:
+- Smaller treasures lie to the left
+- Larger treasures lie to the right
+
+Find the safest meeting island.
+
+Input Format:
+-------------
+Line-1: Integer N
+Line-2: N space separated integers (BST insertion order)
+Line-3: Two integers P and Q
+
+Output Format:
+--------------
+Print the LCA value
+
+Sample Input-1:
+---------------
+9
+50 30 70 20 40 60 80 35 45
+20 40
+
+Sample Output-1:
+----------------
+30
+
+Sample Input-2:
+---------------
+7
+15 10 20 8 12 17 25
+8 12
+
+Sample Output-2:
+----------------
+10
+
+/*
+
+import java.util.*;
+
+class Node{
+    int val;
+    Node left,right;
+    Node(int val){
+        this.val = val;
+    }
+}
+
+class Solution{
+    static Node insert(Node n, int val){
+        if (n==null) return new Node(val);
+        if (n.val<=val) n.right = insert(n.right,val);
+        else n.left = insert(n.left,val);
+        return n;
+    }
+    
+    private static int lca(Node cur, int a, int b){
+        if (cur==null) return -1;
+        
+        if (a<cur.val && b<cur.val) return lca(cur.left,a,b);
+        if (a>cur.val && b>cur.val) return lca(cur.right,a,b);
+        
+        return cur.val;
+    }
+    
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        Node root = null;
+        for (int i=0; i<n; i++) root = insert(root,sc.nextInt());
+        int a = sc.nextInt();
+        int b = sc.nextInt();
+        System.out.println(lca(root,a,b));
+    }
+}
+
+*/

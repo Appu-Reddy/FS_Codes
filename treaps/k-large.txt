@@ -1,0 +1,132 @@
+There are n football players standing in the ground, coach wants to know the 
+P-th largest height of the players. Given an array of heights[] and the value of P. 
+Help the coach to find the P'th largest height.
+
+Note: You are supposed to print the P'th largest height in the sorted order of heights[].
+      Not the P'th distinct height.
+ 
+Input Format:
+-------------
+Line-1: Size of array n and P value(space separated)
+Line-2: Array elements of size n.
+
+Output Format:
+--------------
+Print P'th largest height.
+
+Sample input-1:
+---------------
+8 2
+1 2 1 3 4 5 5 5
+
+Sample output-1:
+----------------
+5
+
+Sample input-2:
+---------------
+6 3
+2 4 3 1 2 5
+
+Sample output-2:
+----------------
+3
+
+
+/*
+
+import java.util.*;
+
+class Node{
+    int key, priority, size;
+    Node left, right;
+
+    Node(int key){
+        this.key = key;
+        this.priority = new Random().nextInt(100000);
+        this.size = 1;
+    }
+}
+
+class Treap{
+    Node root;
+
+    int size(Node node){
+        return node == null ? 0 : node.size;
+    }
+
+    void updsize(Node node){
+        if (node != null)
+            node.size = 1 + size(node.left) + size(node.right);
+    }
+
+    Node rotateRight(Node y){
+        Node x = y.left;
+        y.left = x.right;
+        x.right = y;
+        updsize(y);
+        updsize(x);
+        return x;
+    }
+
+    Node rotateLeft(Node x){
+        Node y = x.right;
+        x.right = y.left;
+        y.left = x;
+        updsize(x);
+        updsize(y);
+        return y;
+    }
+
+    Node insert(Node root, int key){
+        if (root==null) return new Node(key);
+
+        if (key<=root.key){
+            root.left = insert(root.left, key);
+            if (root.left.priority > root.priority) root = rotateRight(root);
+        }
+        else{
+            root.right = insert(root.right, key);
+            if (root.right.priority > root.priority) root = rotateLeft(root);
+        }
+        updsize(root);
+        return root;
+    }
+
+    void insert(int key){
+        root = insert(root, key);
+    }
+
+    int kthsmall(Node root, int k){
+        if (root == null) return -1;
+
+        int ls = size(root.left);
+
+        if (k == ls + 1)
+            return root.key;
+        else if (k<=ls)
+            return kthsmall(root.left, k);
+        else
+            return kthsmall(root.right, k - ls - 1);
+    }
+
+    int kthsmall(int k){
+        return kthsmall(root, k);
+    }
+}
+
+public class Solution{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int p = sc.nextInt();
+        Treap trp = new Treap();
+        for (int i=0; i<n; i++) {
+            trp.insert(sc.nextInt());
+        }
+        int k = n - p + 1;
+        System.out.println(trp.kthsmall(k));
+    }
+}
+
+*/
