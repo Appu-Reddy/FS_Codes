@@ -1,0 +1,126 @@
+// 1
+
+/*
+Fetch the names of all hospitals available in the system.
+
+Output Format: hospital_name
+
+Sampel Output:
+--------------
+"Apollo Hyderabad"
+"AIIMS Delhi"
+
+*/
+
+FOR h IN hospitals
+    RETURN h.name
+
+
+// 2
+
+/*
+Retrieve names of doctors who have more than 10 years of experience.
+
+Output Format: doctor_name
+
+Sampel Output:
+--------------
+"Dr. Arjun"
+
+*/
+
+FOR d in doctors
+    FILTER d.experience>10
+    RETURN d.name
+
+
+// 3
+
+/*
+Retrieve the names of patients who are treated by the doctor named "Dr. Arjun".
+
+Output Format: patient_name
+
+Sampel Output:
+--------------
+"Vikram"
+
+
+*/
+
+FOR d in doctors
+    FILTER d.name == "Dr. Arjun"
+    FOR p IN INBOUND d treated_by
+        RETURN p.name
+
+// 4
+
+/*
+Retrieve the diseases diagnosed for the patient named "Anita".
+
+Output Format: disease_name
+
+Sampel Output:
+--------------
+"heart_disease"
+
+
+*/
+
+FOR p IN patients
+    FILTER p.name == "Anita"
+    FOR d IN OUTBOUND p diagnosed_with
+        RETURN d._key
+
+
+// 5
+
+/*
+Retrieve names of doctors who prescribe drugs related to heart_disease.
+
+Output Format: doctor_name
+
+Sampel Output:
+--------------
+"Dr. Meera"
+
+
+*/
+
+FOR d in diseases
+    FILTER d._key == "heart_disease"
+    FOR dr IN INBOUND d related_to
+        FOR doc IN INBOUND dr prescribed
+            RETURN doc.name
+
+
+// 6
+
+/*
+Retrieve each patient along with:
+    - Doctor treating them
+    - Drug prescribed by that doctor
+
+Output Format: patient | doctor | drug
+
+Sampel Output:
+--------------
+{
+  "patient": "Rahul",
+  "doctor": "Dr. Arjun",
+  "drug": "Imatinib"
+}
+{
+  "patient": "Anita",
+  "doctor": "Dr. Meera",
+  "drug": "Aspirin"
+}
+
+
+
+*/
+
+FOR p in patients
+    FOR doc IN OUTBOUND p treated_by
+        FOR drug IN OUTBOUND doc prescribed
+            RETURN {"patient": p.name, "doctor": doc.name, "drug": drug.name}
