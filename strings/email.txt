@@ -90,7 +90,7 @@ public class Solution{
 
         String[] inp = sc.nextLine().toLowerCase().split(" ");
 
-        String regex = "^[a-z0-9](?:[._]?[a-z0-9])*@" +7u1
+        String regex = "^[a-z0-9](?:[._]?[a-z0-9])*@" + 
                        "(gmail|yahoo|outlook|hotmail|protonmail|icloud|zoho|rediffmail|yandex|mail)\\.com$";
 
         Pattern p = Pattern.compile(regex);
