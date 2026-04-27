@@ -57,6 +57,7 @@ Reasoning in AI:
 -- ReAct Paper
 -- Tree Of Thought -- ToT
 -- Agentic AI
+-- RAG Pipeline (Real World Application)
 
 
 Metrics
@@ -72,3 +73,5 @@ Metrics
 -- Focal Loss
 
 OCA
+
+Java Spring Boot
